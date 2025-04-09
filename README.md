@@ -4,6 +4,11 @@
 
 ## Especificacions tecniques
 
+### API's utilitzades
+
+- <http://ip-api.com/json/{ip}>
+- <https://internetdb.shodan.io/{ip}>
+
 ## Explicacio del codi
 
 ## Us, exemples i proves
