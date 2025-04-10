@@ -1,14 +1,20 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [error, setError] = useState<string>();
+  const [isLoading, setIsLoading] = useState(false);
 
+  const handleSearch = async (ip: string) => {
+
+  }
   return (
     <div className="main">
       <p>Escriu l'adreça IP per veure localització i informació</p>
+      <IpInput onSearch={handleSearch} isLoading={isLoading} />
+      <div className="map-container">
+        <Map ipInfo={ipInfo} />
+      </div>
     </div>
   )
 }
