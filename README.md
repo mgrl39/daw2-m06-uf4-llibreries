@@ -8,6 +8,7 @@
 
 - <http://ip-api.com/json/{ip}>
 - <https://internetdb.shodan.io/{ip}>
+- <https://api.my-ip.io/v2/ip.xml>
 
 ## Explicacio del codi
 
