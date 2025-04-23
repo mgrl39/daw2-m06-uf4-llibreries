@@ -1,34 +1,42 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
+import Map from './components/Map'
+import IpSearch from './components/IpSearch'
+import { getIpInfo } from './services/ipService'
+import { CombinedIpInfo } from './types/IpInfo'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [ipInfo, setIpInfo] = useState<CombinedIpInfo>()
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string>()
+
+  const handleSearch = async (ip: string) => {
+    setIsLoading(true)
+    setError(undefined)
+    try {
+      const info = await getIpInfo(ip)
+      setIpInfo(info)
+    } catch (err) {
+      setError('Error fetching IP information. Please try again.')
+      console.error(err)
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className="app">
+      <h1>IP Address Mapper</h1>
+      <p>Enter an IP address to see its location and security information</p>
+      
+      <IpSearch onSearch={handleSearch} isLoading={isLoading} />
+      
+      {error && <div className="error">{error}</div>}
+      
+      <div className="map-container">
+        <Map ipInfo={ipInfo} />
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    </div>
   )
 }
 
