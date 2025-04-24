@@ -64,9 +64,9 @@ function Controls({
   const prevPos = useRef(pos);
 
   useEffect(() => {
-    if (prevPos.current[0] == pos[0] || prevPos.current[1] == pos[1]) return ;
-      map.flyTo(pos, 13, { duration: 1.5 });
-      prevPos.current = pos;
+    if (prevPos.current[0] == pos[0] || prevPos.current[1] == pos[1]) return;
+    map.flyTo(pos, 13, { duration: 1.5 });
+    prevPos.current = pos;
   }, [map, pos]);
 
   /*
@@ -83,16 +83,24 @@ function Controls({
         return;
 
       switch (e.key) {
-        case "ArrowUp": case "w": case "W":
+        case "ArrowUp":
+        case "w":
+        case "W":
           map.panBy([0, -50]);
           break;
-        case "ArrowDown": case "s": case "S":
+        case "ArrowDown":
+        case "s":
+        case "S":
           map.panBy([0, 50]);
           break;
-        case "ArrowLeft": case "a": case "A":
+        case "ArrowLeft":
+        case "a":
+        case "A":
           map.panBy([-50, 0]);
           break;
-        case "ArrowRight": case "d": case "D":
+        case "ArrowRight":
+        case "d":
+        case "D":
           map.panBy([50, 0]);
           break;
         case "+":
@@ -128,7 +136,7 @@ export default function Map({ ipInfo }: { ipInfo?: CombinedIpInfo }) {
   const defaultPos: LatLngTuple = [40, 0];
   let pos: LatLngTuple;
 
-  if (ipInfo) pos = [ipInfo.ipApi.lat, ipInfo.ipApi.lon]
+  if (ipInfo) pos = [ipInfo.ipApi.lat, ipInfo.ipApi.lon];
   else pos = defaultPos;
   return (
     <>

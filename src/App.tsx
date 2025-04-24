@@ -38,7 +38,8 @@ export default function App() {
     try {
       const info = await getIpInfo(ipAddr);
       setIp(info);
-      if (info.ipApi.status == "fail") setError(`No hi ha dades per: ${ipAddr}`);
+      if (info.ipApi.status == "fail")
+        setError(`No hi ha dades per: ${ipAddr}`);
     } catch (err: any) {
       setError(
         err?.response?.status == 404
