@@ -17,8 +17,7 @@ function App() {
       const info = await getIpInfo(ip)
       setIpInfo(info)
     } catch (err) {
-      setError('Error fetching IP information. Please try again.')
-      console.error(err)
+      setError('Error al obtener información de IP')
     } finally {
       setIsLoading(false)
     }
@@ -26,13 +25,9 @@ function App() {
 
   return (
     <div className="app">
-      <h1>IP Address Mapper</h1>
-      <p>Enter an IP address to see its location and security information</p>
-      
+      <h1>Mapa de Direcciones IP</h1>
       <IpSearch onSearch={handleSearch} isLoading={isLoading} />
-      
       {error && <div className="error">{error}</div>}
-      
       <div className="map-container">
         <Map ipInfo={ipInfo} />
       </div>
