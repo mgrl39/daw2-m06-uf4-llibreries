@@ -14,40 +14,32 @@ const IpSearch = ({ onSearch, isLoading }: IpSearchProps) => {
   };
 
   return (
-    <div className="card shadow-sm">
-      <div className="card-body">
-        <form onSubmit={handleSubmit}>
-          <div className="input-group">
-            <span className="input-group-text bg-light">
-              <i className="bi bi-search"></i>
-            </span>
-            <input
-              type="text"
-              className="form-control form-control-lg border-start-0"
-              value={ip}
-              onChange={(e) => setIp(e.target.value)}
-              placeholder="Introduce dirección IP (ej: 8.8.8.8)..."
-              pattern="^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"
-              title="Por favor, introduce una dirección IPv4 válida"
-              required
-              disabled={isLoading}
-            />
-            <button 
-              className="btn btn-primary px-4" 
-              type="submit" 
-              disabled={isLoading}
-            >
-              {isLoading ? (
-                <>
-                  <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                  Buscando...
-                </>
-              ) : 'Buscar'}
-            </button>
-          </div>
-        </form>
+    <form onSubmit={handleSubmit}>
+      <div className="input-group">
+        <input
+          type="text"
+          className="form-control"
+          value={ip}
+          onChange={(e) => setIp(e.target.value)}
+          placeholder="Ej: 8.8.8.8"
+          pattern="^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"
+          title="Introduce una dirección IPv4 válida"
+          required
+          disabled={isLoading}
+        />
+        <button 
+          className="btn btn-primary" 
+          type="submit" 
+          disabled={isLoading}
+        >
+          {isLoading ? (
+            <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+          ) : (
+            <i className="bi bi-search"></i>
+          )}
+        </button>
       </div>
-    </div>
+    </form>
   );
 };
 
