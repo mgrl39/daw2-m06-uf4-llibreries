@@ -15,5 +15,9 @@
 
 ## Possibles millores o extensions
 
+
+## Agraiments
+- https://www.reshot.com/free-svg-icons/map/
+
 ---
 Fet per [mgrl39](https://www.github.com/mgrl39)
