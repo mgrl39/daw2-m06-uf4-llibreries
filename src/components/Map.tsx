@@ -26,21 +26,40 @@ const Map = ({ ipInfo }: MapProps) => {
     <MapContainer
       center={position}
       zoom={13}
-      style={{ height: '500px', width: '100%' }}
+      style={{ height: '500px', width: '100%', borderRadius: '0.5rem' }}
+      zoomControl={false}
     >
       <TileLayer
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       />
       {ipInfo && (
         <Marker position={position} icon={DefaultIcon}>
-          <Popup>
-            <div className="ip-popup">
-              <h3>IP: {ipInfo.ipApi.query}</h3>
-              <p><strong>Ubicación:</strong> {ipInfo.ipApi.city}, {ipInfo.ipApi.country}</p>
-              <p><strong>ISP:</strong> {ipInfo.ipApi.isp}</p>
+          <Popup className="custom-popup">
+            <div className="text-center">
+              <span className="badge bg-primary mb-2 px-3 py-2">IP: {ipInfo.ipApi.query}</span>
+              <div className="info-item mb-2">
+                <p className="mb-1 fw-bold">
+                  <i className="bi bi-geo-alt me-1"></i>
+                  Ubicación:
+                </p>
+                <p className="text-secondary mb-0">{ipInfo.ipApi.city}, {ipInfo.ipApi.country}</p>
+              </div>
+              <div className="info-item mb-2">
+                <p className="mb-1 fw-bold">
+                  <i className="bi bi-globe me-1"></i>
+                  ISP:
+                </p>
+                <p className="text-secondary mb-0">{ipInfo.ipApi.isp}</p>
+              </div>
               {ipInfo.shodan.ports.length > 0 && (
-                <p><strong>Puertos abiertos:</strong> {ipInfo.shodan.ports.join(', ')}</p>
+                <div className="info-item">
+                  <p className="mb-1 fw-bold">
+                    <i className="bi bi-hdd-network me-1"></i>
+                    Puertos abiertos:
+                  </p>
+                  <p className="text-secondary mb-0">{ipInfo.shodan.ports.join(', ')}</p>
+                </div>
               )}
             </div>
           </Popup>

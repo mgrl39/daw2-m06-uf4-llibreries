@@ -14,20 +14,40 @@ const IpSearch = ({ onSearch, isLoading }: IpSearchProps) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="ip-search">
-      <input
-        type="text"
-        value={ip}
-        onChange={(e) => setIp(e.target.value)}
-        placeholder="Enter IP address..."
-        pattern="^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"
-        title="Please enter a valid IPv4 address"
-        required
-      />
-      <button type="submit" disabled={isLoading}>
-        {isLoading ? 'Searching...' : 'Search'}
-      </button>
-    </form>
+    <div className="card shadow-sm">
+      <div className="card-body">
+        <form onSubmit={handleSubmit}>
+          <div className="input-group">
+            <span className="input-group-text bg-light">
+              <i className="bi bi-search"></i>
+            </span>
+            <input
+              type="text"
+              className="form-control form-control-lg border-start-0"
+              value={ip}
+              onChange={(e) => setIp(e.target.value)}
+              placeholder="Introduce dirección IP (ej: 8.8.8.8)..."
+              pattern="^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"
+              title="Por favor, introduce una dirección IPv4 válida"
+              required
+              disabled={isLoading}
+            />
+            <button 
+              className="btn btn-primary px-4" 
+              type="submit" 
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <>
+                  <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                  Buscando...
+                </>
+              ) : 'Buscar'}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
   );
 };
 
