@@ -12,6 +12,7 @@ export default function App() {
   const [showErr, setShowErr] = useState(false)
 
   // Mostrar y ocultar errores automáticamente
+  // Mostra i oculta errors automaticament
   useEffect(() => {
     if (!error) return
     setShowErr(true)
@@ -35,8 +36,8 @@ export default function App() {
     } catch (err: any) {
       // Gestionar errores
       setError(
-        err?.response?.status === 404 ? `IP no encontrada: ${ipAddr}` :
-        err?.message?.includes('Network') ? 'Error de conexión' :
+        err?.response?.status === 404 ? `IP no trobada: ${ipAddr}` :
+        err?.message?.includes('Network') ? 'Error de conexio' :
         `Error: ${ipAddr}`
       )
     } finally {
@@ -49,7 +50,7 @@ export default function App() {
       <Map ipInfo={ip} />
       
       <div className="search-container">
-        <h4 className="mb-3">Buscar IP</h4>
+        <h4 className="mb-3">Escriu IP</h4>
         <IpSearch onSearch={handleSearch} isLoading={loading} />
       </div>
       
