@@ -1,4 +1,4 @@
-import { useState, FormEvent, ChangeEvent } from 'react';
+import { useState, FormEvent, ChangeEvent, ClipboardEvent } from 'react';
 
 interface IpSearchProps {
   onSearch: (ip: string) => void;
@@ -8,48 +8,39 @@ interface IpSearchProps {
 const IpSearch = ({ onSearch, isLoading }: IpSearchProps) => {
   const [ip, setIp] = useState('');
 
+  // Manejar envío del formulario
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     if (ip.trim()) onSearch(ip.trim());
   };
 
-  // Validar que solo se introduzcan números y puntos con máximo 3 dígitos por sección
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const value : string = e.target.value;
+  // Validar entrada con reglas simplificadas
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
     
     // Solo permitir números y puntos
     if (!/^[0-9.]*$/.test(value)) return;
-  
     
-    // Validar que cada sección tenga máximo 3 dígitos
+    // Validar formato básico de IP
     const parts = value.split('.');
-    
-    // Si alguna sección tiene más de 3 dígitos, no actualizar
-    if (parts.some(part => part.length > 3)) {
-      return;
-    }
-    
-    // Si hay más de 4 secciones, no actualizar
-    if (parts.length > 4) {
-      return;
-    }
+    if (parts.length > 4 || parts.some(part => part.length > 3)) return;
     
     setIp(value);
   };
-
-  // Evitar pegar contenido inválido
-  const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
-    const pasteData = e.clipboardData.getData('text');
+  
+  // Manejar eventos de pegado
+  const handlePaste = (e: ClipboardEvent<HTMLInputElement>) => {
+    const value = e.clipboardData.getData('text');
     
-    // Verificar que solo contiene números y puntos
-    if (!/^[0-9.]*$/.test(pasteData)) {
+    // Solo permitir números y puntos
+    if (!/^[0-9.]*$/.test(value)) {
       e.preventDefault();
       return;
     }
     
-    // Verificar que cada sección tiene máximo 3 dígitos
-    const parts = pasteData.split('.');
-    if (parts.some(part => part.length > 3) || parts.length > 4) {
+    // Validar formato básico de IP
+    const parts = value.split('.');
+    if (parts.length > 4 || parts.some(part => part.length > 3)) {
       e.preventDefault();
     }
   };
@@ -61,14 +52,14 @@ const IpSearch = ({ onSearch, isLoading }: IpSearchProps) => {
           type="text"
           className="form-control"
           value={ip}
-          onChange={handleInputChange}
+          onChange={handleChange}
           onPaste={handlePaste}
           placeholder="Ej: 8.8.8.8"
           pattern="^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"
           title="Introduce una dirección IPv4 válida"
           required
           disabled={isLoading}
-          maxLength={15} // Limitar a 15 caracteres (xxx.xxx.xxx.xxx)
+          maxLength={15}
         />
         <button 
           className="btn btn-primary" 

@@ -11,35 +11,36 @@ function App() {
   const [showError, setShowError] = useState(false)
 
   useEffect(() => {
-    if (error) {
-      setShowError(true)
-      const timer = setTimeout(() => {
-        setShowError(false)
-      }, 3500)
-      return () => clearTimeout(timer)
-    }
+    if (!error) return;
+    
+    setShowError(true);
+    const timer = setTimeout(() => setShowError(false), 3500);
+    return () => clearTimeout(timer);
   }, [error])
 
   const handleSearch = async (ip: string) => {
-    setIsLoading(true)
-    setError(undefined)
+    setIsLoading(true);
+    setError(undefined);
+    
     try {
-      const info = await getIpInfo(ip)
-      setIpInfo(info)
+      const info = await getIpInfo(ip);
+      setIpInfo(info);
+      
       if (info.ipApi.status === 'fail') {
-        setError(`No se encontraron datos para la IP: ${ip}`)
+        setError(`No se encontraron datos para la IP: ${ip}`);
       }
     } catch (err: any) {
-      console.error('Error en búsqueda:', err)
-      if (err?.response?.status === 404) {
-        setError(`La IP ${ip} no fue encontrada`)
-      } else if (err?.message?.includes('Network Error')) {
-        setError('Error de conexión. Verifica tu internet.')
-      } else {
-        setError(`Error al obtener datos para la IP: ${ip}`)
-      }
+      console.error('Error:', err);
+      
+      const message = err?.response?.status === 404 
+        ? `La IP ${ip} no fue encontrada`
+        : err?.message?.includes('Network Error')
+          ? 'Error de conexión. Verifica tu internet.'
+          : `Error al obtener datos para la IP: ${ip}`;
+      
+      setError(message);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   }
 
