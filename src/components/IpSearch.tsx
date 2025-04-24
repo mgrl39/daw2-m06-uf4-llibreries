@@ -1,24 +1,23 @@
-import { useState, FormEvent, ChangeEvent } from 'react';
+import { useState, FormEvent, ChangeEvent } from "react";
 
 type Props = {
   onSearch: (ip: string) => void;
   isLoading: boolean;
-}
+};
 
 const IpSearch = ({ onSearch, isLoading }: Props) => {
-  const [ip, setIp] = useState('');
-  const isValidFormat = (value: string) : boolean => (
-    /^[0-9.]*$/.test(value) && 
-    !value.split('.').some(part => part.length > 3) &&
-    value.split('.').length <= 4
-  );
+  const [ip, setIp] = useState("");
+  const isValidFormat = (value: string): boolean =>
+    /^[0-9.]*$/.test(value) &&
+    !value.split(".").some((part) => part.length > 3) &&
+    value.split(".").length <= 4;
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     if (ip.trim()) onSearch(ip.trim());
   };
 
-  const handleInput = (e: ChangeEvent<HTMLInputElement>) : void => {
+  const handleInput = (e: ChangeEvent<HTMLInputElement>): void => {
     const val = e.target.value;
     if (isValidFormat(val)) setIp(val);
   };
@@ -32,7 +31,7 @@ const IpSearch = ({ onSearch, isLoading }: Props) => {
           value={ip}
           onChange={handleInput}
           onPaste={(e) => {
-            const text = e.clipboardData.getData('text');
+            const text = e.clipboardData.getData("text");
             if (!isValidFormat(text)) e.preventDefault();
           }}
           placeholder="Ex: 8.8.8.8"
@@ -43,13 +42,15 @@ const IpSearch = ({ onSearch, isLoading }: Props) => {
           maxLength={15}
         />
         <button className="btn btn-primary" type="submit" disabled={isLoading}>
-          {isLoading 
-            ? <span className="spinner-border spinner-border-sm"/> 
-            : <i className="bi bi-search"/>}
+          {isLoading ? (
+            <span className="spinner-border spinner-border-sm" />
+          ) : (
+            <i className="bi bi-search" />
+          )}
         </button>
       </div>
     </form>
   );
 };
 
-export default IpSearch; 
+export default IpSearch;
