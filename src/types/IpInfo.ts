@@ -20,7 +20,7 @@ export interface IpApiResponse {
 }
 
 /**
- * Datos Shodan
+ * Dades Shodan
  */
 export interface ShodanResponse {
     cpes: string[];
@@ -49,7 +49,7 @@ export interface IPQualityScoreResponse {
 }
 
 /**
- * Respuesta combinada
+ * Resposta combinada
  */
 export interface CombinedIpInfo {
     ipApi: IpApiResponse;

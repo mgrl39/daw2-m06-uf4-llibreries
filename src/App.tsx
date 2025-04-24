@@ -4,9 +4,8 @@ import IpSearch from './components/IpSearch'
 import { getIpInfo } from './services/ipService'
 import { CombinedIpInfo } from './types/IpInfo'
 
-// Componente principal de la aplicación
+// Component principal de l'aplicació
 export default function App() {
-  // Estado
   const [ip, setIp] = useState<CombinedIpInfo>()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string>()
@@ -31,9 +30,8 @@ export default function App() {
       setIp(info)
       
       // Comprobar error de API
-      if (info.ipApi.status === 'fail') {
-        setError(`No hay datos para: ${ipAddr}`)
-      }
+      // TODO REVISAR ESTAT SI ES FAIL O NO
+      if (info.ipApi.status == 'fail') setError(`No hay datos para: ${ipAddr}`)
     } catch (err: any) {
       // Gestionar errores
       setError(

@@ -7,9 +7,7 @@ type Props = {
 
 const IpSearch = ({ onSearch, isLoading }: Props) => {
   const [ip, setIp] = useState('');
-
-  // Verifica formato básico IP (números y puntos)
-  const isValidFormat = (value: string) => (
+  const isValidFormat = (value: string) : boolean => (
     /^[0-9.]*$/.test(value) && 
     !value.split('.').some(part => part.length > 3) &&
     value.split('.').length <= 4
@@ -20,7 +18,7 @@ const IpSearch = ({ onSearch, isLoading }: Props) => {
     if (ip.trim()) onSearch(ip.trim());
   };
 
-  const handleInput = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleInput = (e: ChangeEvent<HTMLInputElement>) : void => {
     const val = e.target.value;
     if (isValidFormat(val)) setIp(val);
   };
@@ -37,9 +35,9 @@ const IpSearch = ({ onSearch, isLoading }: Props) => {
             const text = e.clipboardData.getData('text');
             if (!isValidFormat(text)) e.preventDefault();
           }}
-          placeholder="Ej: 8.8.8.8"
+          placeholder="Ex: 8.8.8.8"
           pattern="^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"
-          title="IP válida (formato: xxx.xxx.xxx.xxx)"
+          title="IP vàlida (formato: xxx.xxx.xxx.xxx)"
           required
           disabled={isLoading}
           maxLength={15}

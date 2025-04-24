@@ -16,23 +16,23 @@ const mapIcon = new Icon({
 
 // Estilos de mapa disponibles
 const mapStyles = [
-  { name: "Claro", url: "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png" },
-  { name: "Oscuro", url: "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png" },
-  { name: "Satélite", url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}" },
-  { name: "Calles", url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" },
-  { name: "Humanitario", url: "https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png" },
-].map(s => ({...s, attribution: '© OpenStreetMap'}));
+  { name: "Dia", url: "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png" },
+  { name: "Nit", url: "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png" },
+  { name: "Satèlit", url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}" },
+  { name: "Carrers", url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" },
+  { name: "Humanitari", url: "https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png" },
+].map(s => ({...s, attribution: ''}));
 
 // Atajos de teclado
 const shortcuts = [
-  ["↑↓←→", "Mover"],
+  ["↑↓←→", "Moure"],
   ["+/-", "Zoom"],
-  ["1-5", "Mapa"],
+  ["1-5", "Mapeig"],
   ["R", "Reset"],
   ["F", "Buscar"],
 ];
 
-// Controles del mapa
+// Controls del mapa
 function Controls({ 
   pos, 
   setStyle 

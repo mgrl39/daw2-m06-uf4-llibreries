@@ -2,20 +2,20 @@ import axios from 'axios';
 import { IpApiResponse, ShodanResponse, CombinedIpInfo } from '../types/IpInfo';
 
 /**
- * Consulta información de IP desde múltiples APIs
+ * Consultar informació de l'adreça IP des de múltiples API
  */
 export const getIpInfo = async (ip: string): Promise<CombinedIpInfo> => {
-  // Valores por defecto
+
   const emptyData: ShodanResponse = { cpes: [], hostnames: [], ports: [], tags: [], vulns: [] };
   
+  // Obtenir les dades básiques + dades secundaries
   try {
-    // Obtener datos básicos
     const ipData = await axios.get<IpApiResponse>(
       `http://ip-api.com/json/${ip}`, 
       { headers: { 'Accept': 'application/json' }}
     );
     
-    // Intentar obtener datos secundarios
+    // Intentar obtenir dades secundaries
     let shodanData = emptyData;
     try {
       const shodan = await axios.get<ShodanResponse>(`https://internetdb.shodan.io/${ip}`);
