@@ -1,3 +1,6 @@
+/**
+ * Respuesta de IP-API
+ */
 export interface IpApiResponse {
     status: string;
     country: string;
@@ -15,6 +18,9 @@ export interface IpApiResponse {
     query: string;
 }
 
+/**
+ * Respuesta de Shodan
+ */
 export interface ShodanResponse {
     cpes: string[];
     hostnames: string[];
@@ -41,6 +47,9 @@ export interface IPQualityScoreResponse {
     bot_status: boolean;
 }
 
+/**
+ * Información combinada de múltiples fuentes
+ */
 export interface CombinedIpInfo {
     ipApi: IpApiResponse;
     shodan: ShodanResponse;

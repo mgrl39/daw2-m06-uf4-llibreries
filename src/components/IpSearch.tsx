@@ -1,6 +1,6 @@
 import { useState, FormEvent, ChangeEvent, ClipboardEvent } from 'react';
 
-interface IpSearchProps {
+type IpSearchProps = {
   onSearch: (ip: string) => void;
   isLoading: boolean;
 }
@@ -8,41 +8,28 @@ interface IpSearchProps {
 const IpSearch = ({ onSearch, isLoading }: IpSearchProps) => {
   const [ip, setIp] = useState('');
 
-  // Manejar envío del formulario
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault();
-    if (ip.trim()) onSearch(ip.trim());
+  // Validar formato IP básico
+  const isValidIpFormat = (value: string) => {
+    if (!/^[0-9.]*$/.test(value)) return false;
+    
+    const parts = value.split('.');
+    return !(parts.length > 4 || parts.some(part => part.length > 3));
   };
 
-  // Validar entrada con reglas simplificadas
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    const trimmedIp = ip.trim();
+    if (trimmedIp) onSearch(trimmedIp);
+  };
+
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    
-    // Solo permitir números y puntos
-    if (!/^[0-9.]*$/.test(value)) return;
-    
-    // Validar formato básico de IP
-    const parts = value.split('.');
-    if (parts.length > 4 || parts.some(part => part.length > 3)) return;
-    
-    setIp(value);
+    if (isValidIpFormat(value)) setIp(value);
   };
   
-  // Manejar eventos de pegado
   const handlePaste = (e: ClipboardEvent<HTMLInputElement>) => {
     const value = e.clipboardData.getData('text');
-    
-    // Solo permitir números y puntos
-    if (!/^[0-9.]*$/.test(value)) {
-      e.preventDefault();
-      return;
-    }
-    
-    // Validar formato básico de IP
-    const parts = value.split('.');
-    if (parts.length > 4 || parts.some(part => part.length > 3)) {
-      e.preventDefault();
-    }
+    if (!isValidIpFormat(value)) e.preventDefault();
   };
 
   return (
@@ -66,11 +53,10 @@ const IpSearch = ({ onSearch, isLoading }: IpSearchProps) => {
           type="submit" 
           disabled={isLoading}
         >
-          {isLoading ? (
-            <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-          ) : (
-            <i className="bi bi-search"></i>
-          )}
+          {isLoading ? 
+            <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"/> : 
+            <i className="bi bi-search"/>
+          }
         </button>
       </div>
     </form>

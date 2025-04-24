@@ -4,7 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap-icons/font/bootstrap-icons.css'
 import App from './App'
 
-// Renderizar la aplicación en el elemento root
+// Inicialización de la aplicación
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <App />
