@@ -4,15 +4,18 @@ import IpSearch from "./components/IpSearch";
 import { getIpInfo } from "./services/ipService";
 import { CombinedIpInfo } from "./types/IpInfo";
 
-// Component principal de l'aplicació
+/**
+ * Component principal de l'aplicació
+ */
 export default function App() {
   const [ip, setIp] = useState<CombinedIpInfo>();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string>();
   const [showErr, setShowErr] = useState(false);
 
-  // Mostrar y ocultar errores automáticamente
-  // Mostra i oculta errors automaticament
+  /**
+   * Mostra i oculta errors automaticament
+   */
   useEffect(() => {
     if (!error) return;
     setShowErr(true);
@@ -20,26 +23,28 @@ export default function App() {
     return () => clearTimeout(timer);
   }, [error]);
 
-  // Buscar IP
+  /**
+   * Buscar IP
+   * Comprovar error de API
+   * Revisar estat si es Fail o No
+   * Conte gestio d'errors
+   *
+   * TODO: MILLORAR GESTIO ERRORS
+   */
   const handleSearch = async (ipAddr: string) => {
     setLoading(true);
     setError(undefined);
 
     try {
-      // Obtener datos
       const info = await getIpInfo(ipAddr);
       setIp(info);
-
-      // Comprobar error de API
-      // TODO REVISAR ESTAT SI ES FAIL O NO
-      if (info.ipApi.status == "fail") setError(`No hay datos para: ${ipAddr}`);
+      if (info.ipApi.status == "fail") setError(`No hi ha dades per: ${ipAddr}`);
     } catch (err: any) {
-      // Gestionar errores
       setError(
         err?.response?.status == 404
           ? `IP no trobada: ${ipAddr}`
           : err?.message?.includes("Network")
-          ? "Error de conexio"
+          ? "Error de connexió"
           : `Error: ${ipAddr}`
       );
     } finally {

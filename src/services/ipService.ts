@@ -6,28 +6,30 @@ import { IpApiResponse, ShodanResponse, CombinedIpInfo } from "../types/IpInfo";
  * Obtenir les dades básiques + dades secundaries
  * Intentar obtenir dades secundaries
  */
+
+export const IP_API_ENDPOINT: string = `http://ip-api.com/json/`;
+export const SHODAN_API_ENDPOINT: string = `https://internetdb.shodan.io/`;
+
 export const getIpInfo = async (ip: string): Promise<CombinedIpInfo> => {
-  const emptyData: ShodanResponse = {
-    cpes: [],
-    hostnames: [],
-    ports: [],
-    tags: [],
-    vulns: [],
-  };
-
   try {
-    const ipData = await axios.get<IpApiResponse>(
-      `http://ip-api.com/json/${ip}`,
-      { headers: { Accept: "application/json" } }
-    );                  
-    let shodanData: ShodanResponse = emptyData;
-    try {
-      const shodan = await axios.get<ShodanResponse>(
-        `https://internetdb.shodan.io/${ip}`
-      );
-      if (shodan.data) shodanData = shodan.data;
-    } catch {}
+    const ipData = await axios.get<IpApiResponse>(IP_API_ENDPOINT + ip, {
+      headers: { Accept: "application/json" },
+    });
 
+    let shodanData: ShodanResponse = {
+      cpes: [],
+      hostnames: [],
+      ports: [],
+      tags: [],
+      vulns: [],
+    };
+    try {
+      const shodan = await axios.get<ShodanResponse>(SHODAN_API_ENDPOINT + ip);
+      if (shodan.data) shodanData = shodan.data;
+      /*
+       * TODO: DO SOMETHING WITH THIS CATCH
+       */
+    } catch {}
     return { ipApi: ipData.data, shodan: shodanData };
   } catch (error) {
     console.error(`Error IP ${ip}:`, error);

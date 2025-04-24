@@ -42,11 +42,11 @@ const mapStyles = [
 
 // Dreceres de teclat
 const shortcuts: string[][] = [
-  ["↑↓←→", "Moure"],
-  ["+/-", "Zoom"],
-  ["1-5", "Mapeig"],
-  ["R", "Reset"],
-  ["F", "Buscar"],
+  ["↑↓←→ ASDW:", "Moure"],
+  ["+/-:", "Zoom"],
+  ["1-5:", "Mapeig"],
+  ["  R:", "Reset"],
+  ["  F:", "Buscar"],
 ];
 
 /*
@@ -64,10 +64,9 @@ function Controls({
   const prevPos = useRef(pos);
 
   useEffect(() => {
-    if (prevPos.current[0] !== pos[0] || prevPos.current[1] !== pos[1]) {
+    if (prevPos.current[0] == pos[0] || prevPos.current[1] == pos[1]) return ;
       map.flyTo(pos, 13, { duration: 1.5 });
       prevPos.current = pos;
-    }
   }, [map, pos]);
 
   /*
@@ -84,16 +83,16 @@ function Controls({
         return;
 
       switch (e.key) {
-        case "ArrowUp":
+        case "ArrowUp": case "w": case "W":
           map.panBy([0, -50]);
           break;
-        case "ArrowDown":
+        case "ArrowDown": case "s": case "S":
           map.panBy([0, 50]);
           break;
-        case "ArrowLeft":
+        case "ArrowLeft": case "a": case "A":
           map.panBy([-50, 0]);
           break;
-        case "ArrowRight":
+        case "ArrowRight": case "d": case "D":
           map.panBy([50, 0]);
           break;
         case "+":
@@ -127,10 +126,10 @@ function Controls({
 export default function Map({ ipInfo }: { ipInfo?: CombinedIpInfo }) {
   const [styleIdx, setStyleIdx] = useState(0);
   const defaultPos: LatLngTuple = [40, 0];
-  const pos: LatLngTuple = ipInfo
-    ? [ipInfo.ipApi.lat, ipInfo.ipApi.lon]
-    : defaultPos;
+  let pos: LatLngTuple;
 
+  if (ipInfo) pos = [ipInfo.ipApi.lat, ipInfo.ipApi.lon]
+  else pos = defaultPos;
   return (
     <>
       <div className="map-style-selector">

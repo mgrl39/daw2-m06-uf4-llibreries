@@ -5,22 +5,22 @@ export interface IpApiResponse {
   status: string;
   country: string;
   countryCode: string;
+  region?: string;
+  regionName?: string;
   city: string;
+  zip?: string;
   lat: number;
   lon: number;
   timezone: string;
   isp: string;
-  query: string;
-  // Opcionales
-  region?: string;
-  regionName?: string;
-  zip?: string;
   org?: string;
   as?: string;
+  query: string;
 }
 
 /**
- * Dades Shodan
+ * Dades Shodan.
+ * La api te un camp IP pero no m'interessa...
  */
 export interface ShodanResponse {
   cpes: string[];
@@ -30,30 +30,15 @@ export interface ShodanResponse {
   vulns: string[];
 }
 
-export interface AbuseIPDBResponse {
-  data: {
-    abuseConfidenceScore: number;
-    totalReports?: number;
-    lastReportedAt?: string;
-  };
-}
-
-export interface IPQualityScoreResponse {
-  proxy: boolean;
-  vpn: boolean;
-  tor: boolean;
-  fraud_score: number;
-  is_crawler: boolean;
-  recent_abuse: boolean;
-  bot_status: boolean;
-}
-
 /**
  * Resposta combinada
  */
 export interface CombinedIpInfo {
   ipApi: IpApiResponse;
   shodan: ShodanResponse;
-  abuseIPDB?: AbuseIPDBResponse;
-  ipQualityScore?: IPQualityScoreResponse;
 }
+
+export type Props = {
+  onSearch: (ip: string) => void;
+  isLoading: boolean;
+};
