@@ -1,35 +1,28 @@
-import { useState, FormEvent, ChangeEvent, ClipboardEvent } from 'react';
+import { useState, FormEvent, ChangeEvent } from 'react';
 
-type IpSearchProps = {
+type Props = {
   onSearch: (ip: string) => void;
   isLoading: boolean;
 }
 
-const IpSearch = ({ onSearch, isLoading }: IpSearchProps) => {
+const IpSearch = ({ onSearch, isLoading }: Props) => {
   const [ip, setIp] = useState('');
 
-  // Validar formato IP básico
-  const isValidIpFormat = (value: string) => {
-    if (!/^[0-9.]*$/.test(value)) return false;
-    
-    const parts = value.split('.');
-    return !(parts.length > 4 || parts.some(part => part.length > 3));
-  };
+  // Verifica formato básico IP (números y puntos)
+  const isValidFormat = (value: string) => (
+    /^[0-9.]*$/.test(value) && 
+    !value.split('.').some(part => part.length > 3) &&
+    value.split('.').length <= 4
+  );
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    const trimmedIp = ip.trim();
-    if (trimmedIp) onSearch(trimmedIp);
+    if (ip.trim()) onSearch(ip.trim());
   };
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    if (isValidIpFormat(value)) setIp(value);
-  };
-  
-  const handlePaste = (e: ClipboardEvent<HTMLInputElement>) => {
-    const value = e.clipboardData.getData('text');
-    if (!isValidIpFormat(value)) e.preventDefault();
+  const handleInput = (e: ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+    if (isValidFormat(val)) setIp(val);
   };
 
   return (
@@ -39,24 +32,22 @@ const IpSearch = ({ onSearch, isLoading }: IpSearchProps) => {
           type="text"
           className="form-control"
           value={ip}
-          onChange={handleChange}
-          onPaste={handlePaste}
+          onChange={handleInput}
+          onPaste={(e) => {
+            const text = e.clipboardData.getData('text');
+            if (!isValidFormat(text)) e.preventDefault();
+          }}
           placeholder="Ej: 8.8.8.8"
           pattern="^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"
-          title="Introduce una dirección IPv4 válida"
+          title="IP válida (formato: xxx.xxx.xxx.xxx)"
           required
           disabled={isLoading}
           maxLength={15}
         />
-        <button 
-          className="btn btn-primary" 
-          type="submit" 
-          disabled={isLoading}
-        >
-          {isLoading ? 
-            <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"/> : 
-            <i className="bi bi-search"/>
-          }
+        <button className="btn btn-primary" type="submit" disabled={isLoading}>
+          {isLoading 
+            ? <span className="spinner-border spinner-border-sm"/> 
+            : <i className="bi bi-search"/>}
         </button>
       </div>
     </form>

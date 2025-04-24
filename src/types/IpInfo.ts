@@ -1,25 +1,26 @@
 /**
- * Respuesta de IP-API
+ * Datos básicos IP-API
  */
 export interface IpApiResponse {
     status: string;
     country: string;
     countryCode: string;
-    region: string;
-    regionName: string;
     city: string;
-    zip: string;
     lat: number;
     lon: number;
     timezone: string;
     isp: string;
-    org: string;
-    as: string;
     query: string;
+    // Opcionales
+    region?: string;
+    regionName?: string;
+    zip?: string;
+    org?: string;
+    as?: string;
 }
 
 /**
- * Respuesta de Shodan
+ * Datos Shodan
  */
 export interface ShodanResponse {
     cpes: string[];
@@ -48,7 +49,7 @@ export interface IPQualityScoreResponse {
 }
 
 /**
- * Información combinada de múltiples fuentes
+ * Respuesta combinada
  */
 export interface CombinedIpInfo {
     ipApi: IpApiResponse;

@@ -1,58 +1,65 @@
 import { MapContainer, TileLayer, Marker, Popup, useMap, ZoomControl } from 'react-leaflet';
-import { Icon } from 'leaflet';
+import { Icon, LatLngTuple } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { CombinedIpInfo } from '../types/IpInfo';
 import { useEffect, useState, useRef } from 'react';
 import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 
-// Configuración y datos estáticos
-const DefaultIcon = new Icon({
+// Configuración básica
+const mapIcon = new Icon({
   iconUrl: icon,
   shadowUrl: iconShadow,
   iconSize: [25, 41],
   iconAnchor: [12, 41]
 });
 
+// Estilos de mapa disponibles
 const mapStyles = [
   { name: "Claro", url: "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png" },
   { name: "Oscuro", url: "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png" },
   { name: "Satélite", url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}" },
   { name: "Calles", url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" },
-  { name: "Ciclovía", url: "https://tile.thunderforest.com/cycle/{z}/{x}/{y}.png?apikey=6170aad10dfd42a38d4d8c709a536f38" },
-  { name: "Transporte", url: "https://tile.thunderforest.com/transport/{z}/{x}/{y}.png?apikey=6170aad10dfd42a38d4d8c709a536f38" }
-].map(s => ({ ...s, attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>' }));
+  { name: "Humanitario", url: "https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png" },
+].map(s => ({...s, attribution: '© OpenStreetMap'}));
 
+// Atajos de teclado
 const shortcuts = [
-  { key: "↑↓←→", action: "Mover" },
-  { key: "+/-", action: "Zoom" },
-  { key: "1-6", action: "Mapa" },
-  { key: "R", action: "Reset" },
-  { key: "F", action: "Buscar" }
+  ["↑↓←→", "Mover"],
+  ["+/-", "Zoom"],
+  ["1-5", "Mapa"],
+  ["R", "Reset"],
+  ["F", "Buscar"],
 ];
 
-// Control del mapa con teclado y animación
-function MapControls({ position, setStyle }: { position: [number, number], setStyle: (idx: number) => void }) {
+// Controles del mapa
+function Controls({ 
+  pos, 
+  setStyle 
+}: { 
+  pos: LatLngTuple, 
+  setStyle: (idx: number) => void 
+}) {
   const map = useMap();
-  const prevPos = useRef(position);
+  const prevPos = useRef(pos);
   
-  // Actualizar posición con animación
+  // Animación al cambiar posición
   useEffect(() => {
-    if (prevPos.current[0] !== position[0] || prevPos.current[1] !== position[1]) {
-      map.flyTo(position, 13, { duration: 1.5 });
-      prevPos.current = position;
+    if (prevPos.current[0] !== pos[0] || prevPos.current[1] !== pos[1]) {
+      map.flyTo(pos, 13, { duration: 1.5 });
+      prevPos.current = pos;
     }
-  }, [map, position]);
+  }, [map, pos]);
   
-  // Control de teclado
+  // Atajos de teclado
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
-      // No procesar si estamos en un input
-      if (document.activeElement instanceof HTMLInputElement || 
-          document.activeElement instanceof HTMLTextAreaElement ||
-          document.activeElement instanceof HTMLSelectElement) return;
+      // Ignorar si estamos en un input
+      if (document.activeElement?.tagName === 'INPUT' || 
+          document.activeElement?.tagName === 'TEXTAREA' || 
+          document.activeElement?.tagName === 'SELECT') return;
       
-      // Acciones de teclas
+      // Procesamiento de teclas
       switch (e.key) {
         case 'ArrowUp': map.panBy([0, -50]); break;
         case 'ArrowDown': map.panBy([0, 50]); break;
@@ -63,11 +70,12 @@ function MapControls({ position, setStyle }: { position: [number, number], setSt
         case 'r': case 'R': map.setView([40, 0], 3); break;
         case 'f': case 'F':
           const input = document.querySelector('.search-container input');
-          if (input && input instanceof HTMLInputElement) input.focus();
+          if (input instanceof HTMLInputElement) input.focus();
           break;
         default:
+          // Números 1-5 cambian estilo de mapa
           const num = parseInt(e.key);
-          if (num >= 1 && num <= 6) setStyle(num - 1);
+          if (num >= 1 && num <= 5) setStyle(num - 1);
       }
     };
     
@@ -78,15 +86,15 @@ function MapControls({ position, setStyle }: { position: [number, number], setSt
   return null;
 }
 
-// Componente principal del mapa
-const Map = ({ ipInfo }: { ipInfo?: CombinedIpInfo }) => {
+// Componente principal
+export default function Map({ ipInfo }: { ipInfo?: CombinedIpInfo }) {
   const [styleIdx, setStyleIdx] = useState(0);
-  const defaultPos: [number, number] = [40, 0];
-  const position = ipInfo ? [ipInfo.ipApi.lat, ipInfo.ipApi.lon] as [number, number] : defaultPos;
+  const defaultPos: LatLngTuple = [40, 0];
+  const pos: LatLngTuple = ipInfo ? [ipInfo.ipApi.lat, ipInfo.ipApi.lon] : defaultPos;
 
   return (
     <>
-      {/* Controles de UI */}
+      {/* UI Controls */}
       <div className="map-style-selector">
         <select value={styleIdx} onChange={e => setStyleIdx(parseInt(e.target.value))}>
           {mapStyles.map((s, i) => (
@@ -97,14 +105,14 @@ const Map = ({ ipInfo }: { ipInfo?: CombinedIpInfo }) => {
       
       <div className="keyboard-help">
         <div className="keyboard-help-content">
-          <h5>Atajos de teclado</h5>
-          {shortcuts.map((sc, i) => (
-            <div key={i}><span>{sc.key}</span> {sc.action}</div>
+          <h5>Atajos</h5>
+          {shortcuts.map(([key, action], i) => (
+            <div key={i}><span>{key}</span> {action}</div>
           ))}
         </div>
       </div>
       
-      {/* Mapa */}
+      {/* Map Container */}
       <MapContainer
         center={defaultPos}
         zoom={3}
@@ -112,21 +120,18 @@ const Map = ({ ipInfo }: { ipInfo?: CombinedIpInfo }) => {
         zoomControl={false}
       >
         <ZoomControl position="bottomright" />
-        <MapControls position={position} setStyle={setStyleIdx} />
-        <TileLayer 
-          url={mapStyles[styleIdx].url} 
-          attribution={mapStyles[styleIdx].attribution}
-        />
+        <Controls pos={pos} setStyle={setStyleIdx} />
+        <TileLayer url={mapStyles[styleIdx].url} attribution={mapStyles[styleIdx].attribution} />
         
         {ipInfo && (
-          <Marker position={position} icon={DefaultIcon}>
+          <Marker position={pos} icon={mapIcon}>
             <Popup>
               <div>
                 <span className="fw-bold">IP: {ipInfo.ipApi.query}</span>
                 <p className="mb-1 mt-2">📍 {ipInfo.ipApi.city}, {ipInfo.ipApi.country}</p>
                 <p className="mb-1">🌐 {ipInfo.ipApi.isp}</p>
                 {ipInfo.shodan.ports.length > 0 && (
-                  <p className="mb-0">🔌 Puertos: {ipInfo.shodan.ports.join(', ')}</p>
+                  <p className="mb-0">🔌 {ipInfo.shodan.ports.join(', ')}</p>
                 )}
               </div>
             </Popup>
@@ -135,6 +140,4 @@ const Map = ({ ipInfo }: { ipInfo?: CombinedIpInfo }) => {
       </MapContainer>
     </>
   );
-};
-
-export default Map; 
+} 
