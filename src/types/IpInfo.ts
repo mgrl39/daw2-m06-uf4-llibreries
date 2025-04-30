@@ -1,5 +1,5 @@
 /**
- * Datos básicos IP-API
+ * Datos básicos IP-API (adaptados para ipapi.co)
  */
 export interface IpApiResponse {
   status: string;
@@ -17,6 +17,15 @@ export interface IpApiResponse {
   org?: string;
   as?: string;
   query: string;
+
+  // ipapi.co fields (used internally)
+  country_name?: string;
+  country_code?: string;
+  region_code?: string;
+  postal?: string;
+  latitude?: number;
+  longitude?: number;
+  asn?: string;
 }
 
 /**
