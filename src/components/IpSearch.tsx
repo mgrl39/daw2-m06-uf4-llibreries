@@ -8,9 +8,6 @@ const IpSearch = ({ onSearch, isLoading }: Props) => {
     !value.split(".").some((part) => part.length > 3) &&
     value.split(".").length <= 4;
 
-  // TODO: CHECK 255.255.255.255 AND 0.0.0.0
-  const isCorner = (value: string): boolean => true;
-
   const handleSubmit = (e: FormEvent): void => {
     e.preventDefault();
     if (ip.trim()) onSearch(ip.trim());
