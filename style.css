@@ -52,3 +52,107 @@
   animation: fadeIn 0.3s, fadeOut 0.5s 3s forwards;
 }
   */
+
+.holiday-popup {
+  max-width: 280px;
+}
+
+.holiday-details {
+  border-top: 1px solid #eee;
+  padding-top: 10px;
+}
+
+.holiday-list {
+  padding-left: 0;
+  list-style-type: none;
+}
+
+.holiday-item {
+  margin-bottom: 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px dashed #f0f0f0;
+}
+
+.holiday-item:last-child {
+  border-bottom: none;
+}
+
+.holiday-date {
+  font-weight: 500;
+  color: #e63946;
+}
+
+.holiday-name {
+  font-size: 0.95em;
+}
+
+.holiday-intl-name {
+  font-size: 0.8em;
+  color: #666;
+  font-style: italic;
+}
+
+/* Estilos para el contenedor de festivos */
+.holiday-container {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+  width: 300px;
+  background: white;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.holiday-header {
+  margin-bottom: 15px;
+  text-align: center;
+  border-bottom: 2px solid #f8f9fa;
+  padding-bottom: 10px;
+}
+
+.holiday-header h5 {
+  margin-bottom: 5px;
+  font-weight: 600;
+}
+
+.holiday-subtitle {
+  font-size: 0.8rem;
+  color: #6c757d;
+}
+
+.holiday-list {
+  padding-left: 0;
+  list-style-type: none;
+  margin-bottom: 0;
+}
+
+.holiday-item {
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed #e9ecef;
+}
+
+.holiday-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.holiday-date {
+  font-weight: 500;
+  color: #e63946;
+}
+
+.holiday-name {
+  font-size: 0.95em;
+}
+
+.holiday-intl-name {
+  font-size: 0.8em;
+  color: #6c757d;
+  font-style: italic;
+}

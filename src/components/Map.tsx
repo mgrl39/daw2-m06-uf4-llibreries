@@ -134,10 +134,19 @@ function Controls({
 export default function Map({ ipInfo }: { ipInfo?: CombinedIpInfo }) {
   const [styleIdx, setStyleIdx] = useState(0);
   const defaultPos: LatLngTuple = [40, 0];
-  let pos: LatLngTuple;
+  let pos: LatLngTuple = defaultPos;
 
-  if (ipInfo) pos = [ipInfo.ipApi.lat, ipInfo.ipApi.lon];
-  else pos = defaultPos;
+  // Verificar que las coordenadas son válidas antes de asignarlas
+  const hasValidCoordinates =
+    ipInfo &&
+    ipInfo.ipApi.status === "success" &&
+    typeof ipInfo.ipApi.lat === "number" &&
+    typeof ipInfo.ipApi.lon === "number";
+
+  if (hasValidCoordinates) {
+    pos = [ipInfo.ipApi.lat, ipInfo.ipApi.lon];
+  }
+
   return (
     <>
       <div className="map-style-selector">
@@ -176,7 +185,8 @@ export default function Map({ ipInfo }: { ipInfo?: CombinedIpInfo }) {
           attribution={mapStyles[styleIdx].attribution}
         />
 
-        {ipInfo && (
+        {/* Solo mostrar el marcador si hay coordenadas válidas */}
+        {hasValidCoordinates && (
           <Marker position={pos} icon={mapIcon}>
             <Popup>
               <div>
@@ -185,8 +195,11 @@ export default function Map({ ipInfo }: { ipInfo?: CombinedIpInfo }) {
                   📍 {ipInfo.ipApi.city}, {ipInfo.ipApi.country}
                 </p>
                 <p className="mb-1">🌐 {ipInfo.ipApi.isp}</p>
-                {ipInfo.shodan.ports.length > 0 && (
-                  <p className="mb-0">🔌 {ipInfo.shodan.ports.join(", ")}</p>
+                {ipInfo.ipApi.org && (
+                  <p className="mb-1">🏢 {ipInfo.ipApi.org}</p>
+                )}
+                {ipInfo.ipApi.as && (
+                  <p className="mb-0">🔌 {ipInfo.ipApi.as}</p>
                 )}
               </div>
             </Popup>

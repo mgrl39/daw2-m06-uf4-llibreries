@@ -3,6 +3,7 @@
  */
 export interface IpApiResponse {
   status: string;
+  message?: string;
   country: string;
   countryCode: string;
   region?: string;
@@ -31,11 +32,27 @@ export interface ShodanResponse {
 }
 
 /**
+ * Datos de días festivos
+ */
+export interface HolidayInfo {
+  date: string;
+  localName: string;
+  name: string;
+  countryCode: string;
+  fixed: boolean;
+  global: boolean;
+  counties: string[] | null;
+  launchYear: number | null;
+  types: string[];
+}
+
+/**
  * Resposta combinada
  */
 export interface CombinedIpInfo {
   ipApi: IpApiResponse;
   shodan: ShodanResponse;
+  holidays: HolidayInfo[];
 }
 
 export type Props = {
