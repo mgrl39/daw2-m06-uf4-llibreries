@@ -6,7 +6,7 @@ import { IpApiResponse, HolidayInfo, CombinedIpInfo } from "../types/IpInfo";
  * Obtenir les dades básiques + festius
  */
 
-export const IP_API_ENDPOINT: string = `http://ip-api.com/json/`;
+export const IP_API_ENDPOINT: string = `https://ip-api.com/json/`;
 export const HOLIDAYS_API_ENDPOINT: string = `https://date.nager.at/api/v3/publicholidays/`;
 
 export const getIpInfo = async (ip: string): Promise<CombinedIpInfo> => {
