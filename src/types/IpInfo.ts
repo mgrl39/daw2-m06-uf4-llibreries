@@ -23,13 +23,6 @@ export interface IpApiResponse {
  * Dades Shodan.
  * La api te un camp IP pero no m'interessa...
  */
-export interface ShodanResponse {
-  cpes: string[];
-  hostnames: string[];
-  ports: number[];
-  tags: string[];
-  vulns: string[];
-}
 
 /**
  * Datos de días festivos
@@ -51,7 +44,6 @@ export interface HolidayInfo {
  */
 export interface CombinedIpInfo {
   ipApi: IpApiResponse;
-  shodan: ShodanResponse;
   holidays: HolidayInfo[];
 }
 

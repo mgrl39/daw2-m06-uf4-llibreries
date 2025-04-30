@@ -1,41 +1,20 @@
 import axios from "axios";
-import {
-  IpApiResponse,
-  ShodanResponse,
-  CombinedIpInfo,
-  HolidayInfo,
-} from "../types/IpInfo";
+import { IpApiResponse, HolidayInfo, CombinedIpInfo } from "../types/IpInfo";
 
 /**
  * Consultar informació de l'adreça IP des de múltiples API
- * Obtenir les dades básiques + dades secundaries
- * Intentar obtenir dades secundaries
+ * Obtenir les dades básiques + festius
  */
 
 export const IP_API_ENDPOINT: string = `http://ip-api.com/json/`;
-export const SHODAN_API_ENDPOINT: string = `https://internetdb.shodan.io/`;
 export const HOLIDAYS_API_ENDPOINT: string = `https://date.nager.at/api/v3/publicholidays/`;
 
 export const getIpInfo = async (ip: string): Promise<CombinedIpInfo> => {
   try {
+    // Obtener información básica de la IP
     const ipData = await axios.get<IpApiResponse>(IP_API_ENDPOINT + ip, {
       headers: { Accept: "application/json" },
     });
-
-    let shodanData: ShodanResponse = {
-      cpes: [],
-      hostnames: [],
-      ports: [],
-      tags: [],
-      vulns: [],
-    };
-    try {
-      const shodan = await axios.get<ShodanResponse>(SHODAN_API_ENDPOINT + ip);
-      if (shodan.data) shodanData = shodan.data;
-      /*
-       * TODO: DO SOMETHING WITH THIS CATCH
-       */
-    } catch {}
 
     let holidays: HolidayInfo[] = [];
 
@@ -50,16 +29,15 @@ export const getIpInfo = async (ip: string): Promise<CombinedIpInfo> => {
         );
 
         if (holidaysResponse.data) {
-          // Filtrar festivos próximos
+          // Procesamiento de festivos (sin cambios)
           const today = new Date();
           holidays = holidaysResponse.data
             .filter((h) => new Date(h.date) >= today)
             .sort(
               (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
             )
-            .slice(0, 5); // Mostrar solo los 5 próximos
+            .slice(0, 5);
 
-          // Si no hay festivos próximos, mostrar los últimos 5 del año
           if (holidays.length === 0) {
             holidays = holidaysResponse.data
               .sort(
@@ -76,7 +54,6 @@ export const getIpInfo = async (ip: string): Promise<CombinedIpInfo> => {
 
     return {
       ipApi: ipData.data,
-      shodan: shodanData,
       holidays: holidays,
     };
   } catch (error) {

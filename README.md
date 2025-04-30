@@ -7,7 +7,7 @@
 ### API's utilitzades
 
 - <http://ip-api.com/json/{ip}>
-- <https://internetdb.shodan.io/{ip}>
+- <https://date.nager.at/api/v3/publicholidays/{year}/{countryCode}>
 
 ## Explicacio del codi
 
@@ -15,9 +15,10 @@
 
 ## Possibles millores o extensions
 
-
 ## Agraiments
+
 - https://www.reshot.com/free-svg-icons/map/
 
 ---
+
 Fet per [mgrl39](https://www.github.com/mgrl39)
