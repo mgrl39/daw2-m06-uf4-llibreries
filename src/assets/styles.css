@@ -1,0 +1,305 @@
+/**
+ * Estils globals de l'aplicació IPFesta
+ */
+
+:root {
+  --color-primary: #4a6fd6;
+  --color-secondary: #6c757d;
+  --color-success: #28a745;
+  --color-danger: #dc3545;
+  --color-warning: #ffc107;
+  --color-info: #17a2b8;
+  --color-light: #f8f9fa;
+  --color-dark: #343a40;
+  --color-white: #ffffff;
+  --color-transparent: transparent;
+
+  --font-family-sans: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  --font-family-mono: Monaco, Consolas, "Courier New", monospace;
+
+  --shadow-sm: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  --shadow-md: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+  --shadow-lg: 0 1rem 3rem rgba(0, 0, 0, 0.175);
+
+  --radius-sm: 0.2rem;
+  --radius-md: 0.4rem;
+  --radius-lg: 0.8rem;
+}
+
+body {
+  font-family: var(--font-family-sans);
+  margin: 0;
+  padding: 0;
+  background-color: var(--color-light);
+  color: var(--color-dark);
+}
+
+/* Contenidor principal */
+.app-container {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Component del mapa */
+.mapa-contenidor {
+  height: 100vh;
+  width: 100vw;
+  z-index: 1;
+}
+
+/* Selector d'estil del mapa */
+.mapa-selector-estil {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+}
+
+.mapa-selector-estil select {
+  background-color: var(--color-white);
+  border: none;
+  padding: 8px 12px;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  font-size: 0.9rem;
+  cursor: pointer;
+  outline: none;
+}
+
+/* Ajuda de dreceres de teclat */
+.ajuda-teclat {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  z-index: 1000;
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 15px;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  max-width: 200px;
+}
+
+.ajuda-teclat-contingut h5 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.ajuda-teclat-contingut div {
+  font-size: 0.85rem;
+  margin-bottom: 5px;
+}
+
+.ajuda-teclat-contingut span {
+  font-family: var(--font-family-mono);
+  font-weight: 600;
+}
+
+/* Panell de cerca */
+.search-panel {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 1000;
+  background-color: rgba(255, 255, 255, 0.92);
+  padding: 20px;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  width: 280px;
+}
+
+.search-title {
+  margin: 0 0 15px 0;
+  font-size: 1.2rem;
+  color: var(--color-dark);
+}
+
+.ip-search-form {
+  width: 100%;
+}
+
+.search-input-group {
+  display: flex;
+  width: 100%;
+}
+
+.ip-input {
+  flex: 1;
+  padding: 10px 14px;
+  border: 1px solid #ddd;
+  border-right: none;
+  border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+  font-size: 0.95rem;
+  outline: none;
+}
+
+.ip-input:focus {
+  border-color: var(--color-primary);
+}
+
+.search-button {
+  width: 45px;
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  border: none;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.search-button:hover {
+  background-color: #3a5ebe;
+}
+
+.search-button:disabled {
+  background-color: var(--color-secondary);
+  cursor: not-allowed;
+}
+
+.loading-spinner {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: var(--color-white);
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Component d'informació de festius */
+.festius-contenidor {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+  background-color: rgba(255, 255, 255, 0.92);
+  box-shadow: var(--shadow-md);
+  border-radius: var(--radius-md);
+  width: 300px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.festius-capcalera {
+  padding: 15px 15px 10px;
+  border-bottom: 1px solid #eeeeee;
+}
+
+.festius-capcalera h5 {
+  margin: 0 0 5px 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.festius-subtitol {
+  font-size: 0.85rem;
+  color: var(--color-secondary);
+}
+
+.festius-llista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.festiu-item {
+  padding: 12px 15px;
+  border-bottom: 1px solid #eeeeee;
+}
+
+.festiu-item:last-child {
+  border-bottom: none;
+}
+
+.festiu-data {
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 4px;
+  color: var(--color-primary);
+}
+
+.festiu-nom {
+  font-size: 1rem;
+}
+
+.festiu-nom-intl {
+  font-size: 0.85rem;
+  color: var(--color-secondary);
+  font-style: italic;
+}
+
+/* Popup del marcador */
+.info-popup {
+  padding: 5px;
+  min-width: 200px;
+}
+
+.info-ip {
+  display: block;
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-bottom: 10px;
+}
+
+.info-ciutat,
+.info-isp,
+.info-org,
+.info-as {
+  margin: 8px 0;
+  font-size: 0.9rem;
+}
+
+/* Notificació d'error */
+.error-notification {
+  position: fixed;
+  top: 25px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2000;
+}
+
+.error-content {
+  background-color: #fee;
+  color: var(--color-danger);
+  padding: 15px 20px;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  display: flex;
+  align-items: center;
+  border-left: 4px solid var(--color-danger);
+}
+
+.error-icon {
+  margin-right: 10px;
+}
+
+/* Adaptació per a dispositius mòbils */
+@media (max-width: 768px) {
+  .search-panel {
+    width: calc(100% - 40px);
+    left: 20px;
+    right: 20px;
+    max-width: none;
+  }
+
+  .festius-contenidor {
+    width: calc(100% - 40px);
+    left: 20px;
+    right: 20px;
+  }
+
+  .mapa-selector-estil {
+    top: 90px;
+  }
+}

@@ -6,7 +6,9 @@ import { useEffect, useState, useRef } from "react";
 import icon from "leaflet/dist/images/marker-icon.png";
 import iconShadow from "leaflet/dist/images/marker-shadow.png";
 
-// Configuración básica
+/**
+ * Configuració bàsica del marcador al mapa
+ */
 const mapIcon = new Icon({
   iconUrl: icon,
   shadowUrl: iconShadow,
@@ -14,8 +16,8 @@ const mapIcon = new Icon({
   iconAnchor: [12, 41],
 });
 
-/*
- * Mapes disponibles
+/**
+ * Estils de mapa disponibles
  */
 const mapStyles = [
   {
@@ -27,7 +29,7 @@ const mapStyles = [
     url: "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
   },
   {
-    name: "🛰️ Satèlit",
+    name: "🛰️ Satèl·lit",
     url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
   },
   {
@@ -40,18 +42,19 @@ const mapStyles = [
   },
 ].map((s) => ({ ...s, attribution: "" }));
 
-// Dreceres de teclat
+/**
+ * Dreceres de teclat disponibles
+ */
 const shortcuts: string[][] = [
   ["↑↓←→ ASDW:", "Moure"],
   ["+/-:", "Zoom"],
   ["1-5:", "Mapeig"],
   ["  R:", "Reset"],
-  ["  F:", "Buscar"],
+  ["  F:", "Cercar"],
 ];
 
-/*
- * Controls del mapa
- * TODO: ARREGLAR ESTO
+/**
+ * Component pels controls del mapa
  */
 function Controls({
   pos,
@@ -63,15 +66,18 @@ function Controls({
   const map = useMap();
   const prevPos = useRef(pos);
 
+  /**
+   * Desplaça el mapa a la posició nova quan canvia
+   */
   useEffect(() => {
-    if (prevPos.current[0] == pos[0] || prevPos.current[1] == pos[1]) return;
+    if (prevPos.current[0] === pos[0] && prevPos.current[1] === pos[1]) return;
     map.flyTo(pos, 13, { duration: 1.5 });
     prevPos.current = pos;
   }, [map, pos]);
 
-  /*
-   * Dreceres i control de teclat.
-   * Ignorem si estem a l'input.
+  /**
+   * Gestiona les dreceres de teclat
+   * Ignora si l'usuari està en un camp d'entrada
    */
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
@@ -116,7 +122,7 @@ function Controls({
           break;
         case "f":
         case "F":
-          let input = document.querySelector(".search-container input");
+          let input = document.querySelector(".search-panel input");
           if (input instanceof HTMLInputElement) input.focus();
           break;
         default:
@@ -127,16 +133,21 @@ function Controls({
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
   }, [map, setStyle]);
+
   return null;
 }
 
-// Componente principal
+/**
+ * Component principal del mapa
+ */
 export default function Map({ ipInfo }: { ipInfo?: CombinedIpInfo }) {
   const [styleIdx, setStyleIdx] = useState(0);
   const defaultPos: LatLngTuple = [40, 0];
   let pos: LatLngTuple = defaultPos;
 
-  // Verificar que las coordenadas son válidas antes de asignarlas
+  /**
+   * Verifica que les coordenades són vàlides abans d'assignar-les
+   */
   const hasValidCoordinates =
     ipInfo &&
     ipInfo.ipApi.status === "success" &&
@@ -149,7 +160,7 @@ export default function Map({ ipInfo }: { ipInfo?: CombinedIpInfo }) {
 
   return (
     <>
-      <div className="map-style-selector">
+      <div className="mapa-selector-estil">
         <select
           value={styleIdx}
           onChange={(e) => setStyleIdx(parseInt(e.target.value))}
@@ -162,8 +173,8 @@ export default function Map({ ipInfo }: { ipInfo?: CombinedIpInfo }) {
         </select>
       </div>
 
-      <div className="keyboard-help">
-        <div className="keyboard-help-content">
+      <div className="ajuda-teclat">
+        <div className="ajuda-teclat-contingut">
           <h5>Dreceres de teclat</h5>
           {shortcuts.map(([key, action], i) => (
             <div key={i}>
@@ -176,7 +187,7 @@ export default function Map({ ipInfo }: { ipInfo?: CombinedIpInfo }) {
       <MapContainer
         center={defaultPos}
         zoom={3}
-        style={{ height: "100vh", width: "100vw" }}
+        className="mapa-contenidor"
         zoomControl={false}
       >
         <Controls pos={pos} setStyle={setStyleIdx} />
@@ -185,21 +196,20 @@ export default function Map({ ipInfo }: { ipInfo?: CombinedIpInfo }) {
           attribution={mapStyles[styleIdx].attribution}
         />
 
-        {/* Solo mostrar el marcador si hay coordenadas válidas */}
         {hasValidCoordinates && (
           <Marker position={pos} icon={mapIcon}>
             <Popup>
-              <div>
-                <span className="fw-bold">IP: {ipInfo.ipApi.query}</span>
-                <p className="mb-1 mt-2">
+              <div className="info-popup">
+                <span className="info-ip">IP: {ipInfo.ipApi.query}</span>
+                <p className="info-ciutat">
                   📍 {ipInfo.ipApi.city}, {ipInfo.ipApi.country}
                 </p>
-                <p className="mb-1">🌐 {ipInfo.ipApi.isp}</p>
+                <p className="info-isp">🌐 {ipInfo.ipApi.isp}</p>
                 {ipInfo.ipApi.org && (
-                  <p className="mb-1">🏢 {ipInfo.ipApi.org}</p>
+                  <p className="info-org">🏢 {ipInfo.ipApi.org}</p>
                 )}
                 {ipInfo.ipApi.as && (
-                  <p className="mb-0">🔌 {ipInfo.ipApi.as}</p>
+                  <p className="info-as">🔌 {ipInfo.ipApi.as}</p>
                 )}
               </div>
             </Popup>

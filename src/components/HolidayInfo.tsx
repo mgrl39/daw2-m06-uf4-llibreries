@@ -6,36 +6,39 @@ interface HolidayInfoProps {
   isVisible: boolean;
 }
 
+/**
+ * Component per mostrar els dies festius d'un país
+ */
 const HolidayInfo = ({ holidays, country, isVisible }: HolidayInfoProps) => {
   if (!isVisible || holidays.length === 0) return null;
 
   return (
-    <div className="holiday-container">
-      <div className="holiday-header">
-        <h5>🎉 Festivos en {country}</h5>
-        <span className="holiday-subtitle">
+    <div className="festius-contenidor">
+      <div className="festius-capcalera">
+        <h5>🎉 Dies festius a {country}</h5>
+        <span className="festius-subtitol">
           {new Date() > new Date(holidays[0].date)
-            ? "Festivos más recientes de "
-            : "Próximos festivos de "}
+            ? "Festius més recents de "
+            : "Propers festius de "}
           {new Date().getFullYear()}
         </span>
       </div>
 
-      <ul className="holiday-list">
+      <ul className="festius-llista">
         {holidays.map((holiday, index) => {
-          // Formatear fecha para mostrar
-          const holidayDate = new Date(holiday.date);
-          const formattedDate = holidayDate.toLocaleDateString("es-ES", {
+          // Formatem la data per mostrar-la
+          const dataFestiu = new Date(holiday.date);
+          const dataFormatada = dataFestiu.toLocaleDateString("ca-ES", {
             day: "numeric",
             month: "long",
           });
 
           return (
-            <li key={index} className="holiday-item">
-              <div className="holiday-date">{formattedDate}</div>
-              <div className="holiday-name">{holiday.localName}</div>
+            <li key={index} className="festiu-item">
+              <div className="festiu-data">{dataFormatada}</div>
+              <div className="festiu-nom">{holiday.localName}</div>
               {holiday.localName !== holiday.name && (
-                <div className="holiday-intl-name">{holiday.name}</div>
+                <div className="festiu-nom-intl">{holiday.name}</div>
               )}
             </li>
           );

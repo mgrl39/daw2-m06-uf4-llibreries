@@ -16,7 +16,7 @@ export default function App() {
   const [showHolidays, setShowHolidays] = useState(false);
 
   /**
-   * Mostra i oculta errors automaticament
+   * Mostra i oculta errors automàticament
    */
   useEffect(() => {
     if (!error) return;
@@ -26,7 +26,7 @@ export default function App() {
   }, [error]);
 
   /**
-   * Mostrar festivos cuando hay información de IP
+   * Mostra les festivitats quan hi ha informació d'IP
    */
   useEffect(() => {
     if (ip && ip.holidays.length > 0) {
@@ -37,12 +37,8 @@ export default function App() {
   }, [ip]);
 
   /**
-   * Buscar IP
-   * Comprovar error de API
-   * Revisar estat si es Fail o No
-   * Conte gestio d'errors
-   *
-   * TODO: MILLORAR GESTIO ERRORS
+   * Cerca informació per una IP
+   * Gestiona errors de l'API i actualitza l'estat
    */
   const handleSearch = async (ipAddr: string) => {
     setLoading(true);
@@ -52,14 +48,10 @@ export default function App() {
       const info = await getIpInfo(ipAddr);
       setIp(info);
 
-      // Mejorar la gestión de errores para incluir mensajes específicos
       if (info.ipApi.status === "fail") {
-        if (
-          info.ipApi.message &&
-          info.ipApi.message.includes("reserved range")
-        ) {
+        if (info.ipApi.message?.includes("reserved range")) {
           setError(
-            `IP reservada: ${ipAddr} - No disponible para geolocalización`
+            `IP reservada: ${ipAddr} - No disponible per a geolocalització`
           );
         } else {
           setError(`No hi ha dades per: ${ipAddr}`);
@@ -67,7 +59,7 @@ export default function App() {
       }
     } catch (err: any) {
       setError(
-        err?.response?.status == 404
+        err?.response?.status === 404
           ? `IP no trobada: ${ipAddr}`
           : err?.message?.includes("Network")
           ? "Error de connexió"
@@ -79,11 +71,11 @@ export default function App() {
   };
 
   return (
-    <div className="map-wrapper">
+    <div className="app-container">
       <Map ipInfo={ip} />
 
-      <div className="search-container">
-        <h4 className="mb-3">Escriu IP</h4>
+      <div className="search-panel">
+        <h3 className="search-title">Cerca per IP</h3>
         <IpSearch onSearch={handleSearch} isLoading={loading} />
       </div>
 
@@ -96,10 +88,10 @@ export default function App() {
       )}
 
       {showErr && error && (
-        <div className="error-container">
-          <div className="error-toast">
-            <i className="bi bi-exclamation-triangle-fill me-2" />
-            {error}
+        <div className="error-notification">
+          <div className="error-content">
+            <i className="bi bi-exclamation-triangle-fill error-icon" />
+            <span>{error}</span>
           </div>
         </div>
       )}
