@@ -1,5 +1,5 @@
 import axios from "axios";
-import { IpInfo, Holiday, IpapiResponse } from "../types/IpInfo";
+import { IpInfo, Holiday } from "../types/IpInfo";
 
 /**
  * Consultar informació de l'adreça IP des de múltiples API
@@ -13,30 +13,29 @@ export const getIpInfo = async (
   ip: string
 ): Promise<{ ipInfo: IpInfo; holidays: Holiday[] }> => {
   try {
-    // Consulta IP
-    const ipData = await axios.get<IpapiResponse>(
-      `${IP_API_ENDPOINT}${ip}/json/`
-    );
+    // Consulta información de IP
+    const response = await axios.get(`${IP_API_ENDPOINT}${ip}/json/`);
+    const data = response.data;
 
-    // Adapta respuesta
+    // Mapea la respuesta a nuestro formato interno
     const ipInfo: IpInfo = {
       status: "success",
       query: ip,
-      country: ipData.data.country_name,
-      countryCode: ipData.data.country_code,
-      region: ipData.data.region_code,
-      regionName: ipData.data.region,
-      city: ipData.data.city,
-      zip: ipData.data.postal,
-      lat: ipData.data.latitude,
-      lon: ipData.data.longitude,
-      timezone: ipData.data.timezone,
-      isp: ipData.data.org,
-      org: ipData.data.org,
-      as: ipData.data.asn,
-      currency: ipData.data.currency,
-      currency_name: ipData.data.currency_name,
-      languages: ipData.data.languages,
+      country: data.country_name,
+      countryCode: data.country_code,
+      region: data.region_code,
+      regionName: data.region,
+      city: data.city,
+      zip: data.postal,
+      lat: data.latitude,
+      lon: data.longitude,
+      timezone: data.timezone,
+      isp: data.org,
+      org: data.org,
+      as: data.asn,
+      currency: data.currency,
+      currency_name: data.currency_name,
+      languages: data.languages,
     };
 
     // Consulta festivos
@@ -44,13 +43,13 @@ export const getIpInfo = async (
     if (ipInfo.countryCode) {
       try {
         const year = new Date().getFullYear();
-        const holidaysData = await axios.get<Holiday[]>(
+        const holidaysResponse = await axios.get<Holiday[]>(
           `${HOLIDAYS_API_ENDPOINT}${year}/${ipInfo.countryCode}`
         );
 
         // Filtra próximos/recientes
         const today = new Date();
-        holidays = holidaysData.data
+        holidays = holidaysResponse.data
           .filter((h) => new Date(h.date) >= today)
           .sort(
             (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
@@ -58,7 +57,7 @@ export const getIpInfo = async (
           .slice(0, 5);
 
         if (holidays.length === 0) {
-          holidays = holidaysData.data
+          holidays = holidaysResponse.data
             .sort(
               (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
             )
@@ -71,7 +70,7 @@ export const getIpInfo = async (
 
     return { ipInfo, holidays };
   } catch (error: any) {
-    // Gestión de errores
+    // Respuesta en caso de error
     const errorResponse: IpInfo = {
       status: "fail",
       message:

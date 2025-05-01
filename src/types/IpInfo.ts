@@ -1,31 +1,12 @@
 /**
- * API de IP - Lo que recibimos en bruto
- */
-export interface IpapiResponse {
-  ip: string;
-  city: string;
-  region: string;
-  region_code: string;
-  country_code: string;
-  country_name: string;
-  postal: string;
-  latitude: number;
-  longitude: number;
-  timezone: string;
-  currency: string;
-  currency_name: string;
-  languages: string;
-  asn: string;
-  org: string;
-}
-
-/**
- * Información de IP procesada para uso interno
+ * Información básica de IP
  */
 export interface IpInfo {
   query: string;
   status: "success" | "fail";
   message?: string;
+
+  // Datos de ubicación
   city: string;
   country: string;
   countryCode: string;
@@ -34,6 +15,8 @@ export interface IpInfo {
   zip?: string;
   lat: number;
   lon: number;
+
+  // Datos adicionales
   timezone: string;
   isp: string;
   org?: string;
