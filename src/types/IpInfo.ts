@@ -1,9 +1,38 @@
 /**
- * Datos básicos IP-API (adaptados para ipapi.co)
+ * Dades rebudes directament de l'API ipapi.co
+ */
+export interface IpapiResponse {
+  ip: string;
+  city: string;
+  region: string;
+  region_code: string;
+  country_code: string;
+  country_code_iso3: string;
+  country_name: string;
+  country_capital: string;
+  country_tld: string;
+  continent_code: string;
+  in_eu: boolean;
+  postal: string;
+  latitude: number;
+  longitude: number;
+  timezone: string;
+  utc_offset: string;
+  country_calling_code: string;
+  currency: string;
+  currency_name: string;
+  languages: string;
+  asn: string;
+  org: string;
+}
+
+/**
+ * Resposta adaptada d'IP
  */
 export interface IpApiResponse {
   status: string;
   message?: string;
+  query: string;
   country: string;
   countryCode: string;
   region?: string;
@@ -16,25 +45,13 @@ export interface IpApiResponse {
   isp: string;
   org?: string;
   as?: string;
-  query: string;
-
-  // ipapi.co fields (used internally)
-  country_name?: string;
-  country_code?: string;
-  region_code?: string;
-  postal?: string;
-  latitude?: number;
-  longitude?: number;
-  asn?: string;
+  currency?: string;
+  currency_name?: string;
+  languages?: string;
 }
 
 /**
- * Dades Shodan.
- * La api te un camp IP pero no m'interessa...
- */
-
-/**
- * Datos de días festivos
+ * Dades de dies festius
  */
 export interface HolidayInfo {
   date: string;

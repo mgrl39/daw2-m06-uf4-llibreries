@@ -113,8 +113,11 @@ export default function App() {
         </div>
 
         <div className="col-md-4 col-12 p-3">
-          {ip && (
-            <div className="bg-dark text-white p-3 rounded border border-secondary mb-3">
+          {ip && ip.ipApi.status === "success" && (
+            <div
+              className="bg-dark text-white p-3 rounded border border-secondary mb-3 overflow-auto"
+              style={{ maxHeight: "400px" }}
+            >
               <h5 className="border-bottom pb-2 mb-3 text-warning">
                 📌 Informació d'IP
               </h5>
@@ -122,20 +125,55 @@ export default function App() {
                 <div className="mb-2">
                   <strong>IP:</strong> {ip.ipApi.query}
                 </div>
+
                 {ip.ipApi.city && (
                   <div className="mb-2">
-                    <strong>Localització:</strong> {ip.ipApi.city},{" "}
-                    {ip.ipApi.country}
+                    <strong>Ciutat:</strong> {ip.ipApi.city}
                   </div>
                 )}
-                {ip.ipApi.isp && (
+
+                {ip.ipApi.regionName && (
                   <div className="mb-2">
-                    <strong>ISP:</strong> {ip.ipApi.isp}
+                    <strong>Regió:</strong> {ip.ipApi.regionName}{" "}
+                    {ip.ipApi.region && `(${ip.ipApi.region})`}
                   </div>
                 )}
+
+                {ip.ipApi.country && (
+                  <div className="mb-2">
+                    <strong>País:</strong> {ip.ipApi.country}{" "}
+                    {ip.ipApi.countryCode && `(${ip.ipApi.countryCode})`}
+                  </div>
+                )}
+
+                {ip.ipApi.timezone && (
+                  <div className="mb-2">
+                    <strong>Zona horària:</strong> {ip.ipApi.timezone}
+                  </div>
+                )}
+
+                {ip.ipApi.org && (
+                  <div className="mb-2">
+                    <strong>Organització:</strong> {ip.ipApi.org}
+                  </div>
+                )}
+
                 {ip.ipApi.as && (
                   <div className="mb-2">
-                    <strong>AS:</strong> {ip.ipApi.as}
+                    <strong>ASN:</strong> {ip.ipApi.as}
+                  </div>
+                )}
+
+                {ip.ipApi.currency && (
+                  <div className="mb-2">
+                    <strong>Moneda:</strong> {ip.ipApi.currency}{" "}
+                    {ip.ipApi.currency_name && `(${ip.ipApi.currency_name})`}
+                  </div>
+                )}
+
+                {ip.ipApi.languages && (
+                  <div className="mb-2">
+                    <strong>Idiomes:</strong> {ip.ipApi.languages}
                   </div>
                 )}
               </div>

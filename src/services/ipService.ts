@@ -1,5 +1,10 @@
 import axios from "axios";
-import { IpApiResponse, HolidayInfo, CombinedIpInfo } from "../types/IpInfo";
+import {
+  IpApiResponse,
+  HolidayInfo,
+  CombinedIpInfo,
+  IpapiResponse,
+} from "../types/IpInfo";
 
 /**
  * Consultar informació de l'adreça IP des de múltiples API
@@ -13,7 +18,7 @@ export const HOLIDAYS_API_ENDPOINT =
 export const getIpInfo = async (ip: string): Promise<CombinedIpInfo> => {
   try {
     // Obtenció d'informació bàsica de la IP
-    const ipData = await axios.get<IpApiResponse>(
+    const ipData = await axios.get<IpapiResponse>(
       `${IP_API_ENDPOINT}${ip}/json/`,
       { headers: { Accept: "application/json" } }
     );
@@ -22,18 +27,21 @@ export const getIpInfo = async (ip: string): Promise<CombinedIpInfo> => {
     const adaptedData: IpApiResponse = {
       status: "success",
       query: ip,
-      country: ipData.data.country_name || "",
-      countryCode: ipData.data.country_code || "",
-      region: ipData.data.region_code || "",
-      regionName: ipData.data.region || "",
-      city: ipData.data.city || "",
-      zip: ipData.data.postal || "",
-      lat: ipData.data.latitude || 0,
-      lon: ipData.data.longitude || 0,
-      timezone: ipData.data.timezone || "",
-      isp: ipData.data.org || "",
-      org: ipData.data.org || "",
-      as: ipData.data.asn || "",
+      country: ipData.data.country_name,
+      countryCode: ipData.data.country_code,
+      region: ipData.data.region_code,
+      regionName: ipData.data.region,
+      city: ipData.data.city,
+      zip: ipData.data.postal,
+      lat: ipData.data.latitude,
+      lon: ipData.data.longitude,
+      timezone: ipData.data.timezone,
+      isp: ipData.data.org, // La API utilitza 'org' com ISP
+      org: ipData.data.org,
+      as: ipData.data.asn,
+      currency: ipData.data.currency,
+      currency_name: ipData.data.currency_name,
+      languages: ipData.data.languages,
     };
 
     let holidays: HolidayInfo[] = [];

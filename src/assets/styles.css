@@ -35,3 +35,42 @@ body {
   text-shadow: 0 0 5px #0066ff;
   letter-spacing: 1px;
 }
+
+/* Estil per al marcador actual */
+.current-marker {
+  filter: hue-rotate(120deg) brightness(1.2) !important;
+  z-index: 1000;
+  transition: all 0.3s;
+  transform-origin: bottom center;
+  animation: bounce 0.5s ease-in-out;
+}
+
+/* Estil per als marcadors històrics */
+.history-marker {
+  filter: grayscale(0.7) opacity(0.8) !important;
+  transition: all 0.3s;
+}
+
+.history-marker:hover {
+  filter: grayscale(0) opacity(1) !important;
+  transform: scale(1.2);
+}
+
+@keyframes bounce {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+/* Efecte al mostrar el popup - Redeficit per override */
+.leaflet-popup-content-wrapper {
+  border-radius: 6px;
+  box-shadow: 0 3px 14px rgba(0, 0, 0, 0.4);
+  transition: all 0.3s;
+}
