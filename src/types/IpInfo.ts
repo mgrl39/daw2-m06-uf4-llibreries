@@ -66,13 +66,16 @@ export interface HolidayInfo {
 }
 
 /**
- * Resposta combinada
+ * Dades combinades de l'IP i els dies festius
  */
 export interface CombinedIpInfo {
   ipApi: IpApiResponse;
   holidays: HolidayInfo[];
 }
 
+/**
+ * Props per al component IpSearch
+ */
 export type Props = {
   onSearch: (ip: string) => void;
   isLoading: boolean;

@@ -12,11 +12,24 @@ import "./assets/styles.css";
 import App from "./App";
 
 /**
- * Crea l'arrel de l'aplicacio.
+ * Funció per renderitzar l'aplicació
+ * Renderitza l'aplicació dins l'element amb id 'root'
  * Envolta l'aplicació en StrictMode per detectar problemes potencials
  */
-createRoot(document.getElementById("root")!).render(
-  <StrictMode>
-    <App />
-  </StrictMode>
-);
+const renderApp = () => {
+  const rootElement = document.getElementById("root");
+  if (rootElement) {
+    createRoot(rootElement).render(
+      <StrictMode>
+        <App />
+      </StrictMode>
+    );
+  }
+};
+
+/* Assegurar que els estils estan carregats abans de renderitzar
+ * Si el document està completament carregat, renderitza l'aplicació
+ * Si no, espera a que el document estigui completament carregat
+ */
+if (document.readyState == "complete") renderApp();
+else window.addEventListener("load", renderApp);

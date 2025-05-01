@@ -4,16 +4,55 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>IPFesta</title>
+
+    <!-- Precarregar estils crítics -->
+    <link rel="preload" href="/src/assets/styles.css" as="style" />
+    <link
+      rel="preload"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
+      as="style"
+    />
+
+    <!-- Fonts -->
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
+
+    <!-- Estils -->
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="/src/assets/styles.css" />
-    <style></style>
+
+    <!-- Estils crítics inline per evitar el FOUC -->
+    <style>
+      body {
+        background-color: #222;
+        color: white;
+        font-family: Arial, sans-serif;
+        opacity: 0;
+        transition: opacity 0.2s ease;
+      }
+
+      .leaflet-container {
+        background-color: #333;
+        border: 2px solid #444;
+      }
+
+      /* Estil per mostrar el contingut quan tot està carregat */
+      .content-loaded body {
+        opacity: 1;
+      }
+    </style>
+
+    <script>
+      // Afegir classe per mostrar el contingut quan tot està carregat
+      window.addEventListener("load", function () {
+        document.documentElement.classList.add("content-loaded");
+      });
+    </script>
   </head>
   <body>
     <div id="root"></div>
