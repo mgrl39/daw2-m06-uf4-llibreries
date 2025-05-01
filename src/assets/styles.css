@@ -1,12 +1,15 @@
-/* Estils per fons negre i mode fosc general */
+/* Estils bàsics */
 body {
   background-color: #222;
   color: white;
+  font-family: Arial, sans-serif;
 }
 
-/* Sobreescriu colors de Leaflet per combinació fosca */
+/* Colors pel mapa - mode fosc */
 .leaflet-container {
-  background-color: #111;
+  background-color: #333;
+  border: 2px solid #444;
+  border-radius: 5px;
 }
 
 .leaflet-popup-content-wrapper,
@@ -24,4 +27,11 @@ body {
 
 .leaflet-bar a:hover {
   background-color: #333;
+}
+
+/* Estils personalitzats */
+.app-title {
+  font-family: "Courier New", monospace;
+  text-shadow: 0 0 5px #0066ff;
+  letter-spacing: 1px;
 }

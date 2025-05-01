@@ -13,37 +13,39 @@ const HolidayInfo = ({ holidays, country, isVisible }: HolidayInfoProps) => {
   if (!isVisible || holidays.length === 0) return null;
 
   return (
-    <div
-      className="position-absolute bottom-0 end-0 m-3 bg-black border border-secondary rounded shadow text-white"
-      style={{ width: "280px", maxHeight: "350px", zIndex: 1000 }}
-    >
+    <div className="bg-dark border border-secondary rounded">
       <div className="p-3 border-bottom border-secondary">
-        <h6 className="mb-1 fw-bold">Dies festius: {country}</h6>
-        <small className="text-secondary">
-          {new Date() > new Date(holidays[0].date) ? "Recents" : "Propers"} (
-          {new Date().getFullYear()})
+        <h5 className="text-warning mb-1">🎉 Festius - {country}</h5>
+        <small>
+          {new Date() > new Date(holidays[0].date)
+            ? "Festius més recents"
+            : "Propers festius"}
         </small>
       </div>
 
-      <ul className="list-unstyled m-0">
+      <div className="p-2">
         {holidays.map((holiday, index) => {
           const dataFestiu = new Date(holiday.date);
           const dataFormatada = dataFestiu.toLocaleDateString("ca-ES", {
             day: "numeric",
             month: "long",
+            year: "numeric",
           });
 
           return (
-            <li key={index} className="p-2 border-bottom border-secondary">
-              <div className="fw-bold text-primary small">{dataFormatada}</div>
+            <div
+              key={index}
+              className="p-2 mb-2 bg-dark rounded border border-secondary"
+            >
+              <div className="text-info fw-bold">{dataFormatada}</div>
               <div className="mt-1">{holiday.localName}</div>
               {holiday.localName !== holiday.name && (
                 <div className="small text-secondary">{holiday.name}</div>
               )}
-            </li>
+            </div>
           );
         })}
-      </ul>
+      </div>
     </div>
   );
 };

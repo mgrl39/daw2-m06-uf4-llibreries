@@ -79,7 +79,7 @@ export default function App() {
   return (
     <div className="d-flex flex-column vh-100 bg-dark">
       <header className="bg-black py-3">
-        <h1 className="text-white text-center mb-3">IPFesta</h1>
+        <h1 className="text-center mb-3 app-title">🌍 IPFesta 🌎</h1>
 
         <div className="container">
           <div className="row justify-content-center">
@@ -107,16 +107,51 @@ export default function App() {
         </div>
       </header>
 
-      <main className="flex-grow-1 position-relative">
-        <Map ipInfo={ip} styleIdx={styleIdx} />
+      <main className="flex-grow-1 d-flex flex-wrap">
+        <div className="col-md-8 col-12 h-100">
+          <Map ipInfo={ip} styleIdx={styleIdx} />
+        </div>
 
-        {ip && showHolidays && (
-          <HolidayInfo
-            holidays={ip.holidays}
-            country={ip.ipApi.country}
-            isVisible={showHolidays}
-          />
-        )}
+        <div className="col-md-4 col-12 p-3">
+          {ip && (
+            <div className="bg-dark text-white p-3 rounded border border-secondary mb-3">
+              <h5 className="border-bottom pb-2 mb-3 text-warning">
+                📌 Informació d'IP
+              </h5>
+              <div>
+                <div className="mb-2">
+                  <strong>IP:</strong> {ip.ipApi.query}
+                </div>
+                {ip.ipApi.city && (
+                  <div className="mb-2">
+                    <strong>Localització:</strong> {ip.ipApi.city},{" "}
+                    {ip.ipApi.country}
+                  </div>
+                )}
+                {ip.ipApi.isp && (
+                  <div className="mb-2">
+                    <strong>ISP:</strong> {ip.ipApi.isp}
+                  </div>
+                )}
+                {ip.ipApi.as && (
+                  <div className="mb-2">
+                    <strong>AS:</strong> {ip.ipApi.as}
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {ip && showHolidays && (
+            <div>
+              <HolidayInfo
+                holidays={ip.holidays}
+                country={ip.ipApi.country}
+                isVisible={showHolidays}
+              />
+            </div>
+          )}
+        </div>
       </main>
 
       {showErr && error && (

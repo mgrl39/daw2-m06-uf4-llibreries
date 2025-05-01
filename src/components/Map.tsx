@@ -49,45 +49,29 @@ export default function Map({
     : defaultPos;
 
   return (
-    <MapContainer
-      center={pos}
-      zoom={hasValidCoordinates ? 13 : 3}
-      style={{ width: "100%", height: "100%" }}
-      zoomControl={true}
-    >
-      <TileLayer url={mapUrls[styleIdx]} attribution="" />
+    <div className="h-100 w-100">
+      <MapContainer
+        center={pos}
+        zoom={hasValidCoordinates ? 12 : 3}
+        style={{ width: "100%", height: "100%", minHeight: "400px" }}
+        zoomControl={true}
+      >
+        <TileLayer url={mapUrls[styleIdx]} attribution="" />
 
-      {hasValidCoordinates && (
-        <Marker position={pos} icon={mapIcon}>
-          <Popup>
-            <div className="py-1">
-              <div className="fw-bold mb-2 border-bottom pb-1">
-                {ipInfo.ipApi.query}
-              </div>
-              <div className="mb-1 small">
-                <i className="bi bi-geo-alt me-1"></i>
-                {ipInfo.ipApi.city}, {ipInfo.ipApi.country}
-              </div>
-              <div className="mb-1 small">
-                <i className="bi bi-globe me-1"></i>
-                {ipInfo.ipApi.isp}
-              </div>
-              {ipInfo.ipApi.org && (
-                <div className="mb-1 small">
-                  <i className="bi bi-building me-1"></i>
-                  {ipInfo.ipApi.org}
+        {hasValidCoordinates && (
+          <Marker position={pos} icon={mapIcon}>
+            <Popup>
+              <div className="text-center">
+                <h6>📍 {ipInfo.ipApi.query}</h6>
+                <div>
+                  {ipInfo.ipApi.city}, {ipInfo.ipApi.country}
                 </div>
-              )}
-              {ipInfo.ipApi.as && (
-                <div className="small">
-                  <i className="bi bi-hdd-network me-1"></i>
-                  {ipInfo.ipApi.as}
-                </div>
-              )}
-            </div>
-          </Popup>
-        </Marker>
-      )}
-    </MapContainer>
+                <div className="mt-2 small">{ipInfo.ipApi.isp}</div>
+              </div>
+            </Popup>
+          </Marker>
+        )}
+      </MapContainer>
+    </div>
   );
 }
