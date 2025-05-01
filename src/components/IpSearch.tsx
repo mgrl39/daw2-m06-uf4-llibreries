@@ -1,4 +1,4 @@
-import { useState, FormEvent, ChangeEvent } from "react";
+import { useState } from "react";
 import { ComponentProps } from "../types/IpInfo";
 
 /**
@@ -8,41 +8,29 @@ const IpSearch = ({ onSearch, isLoading }: ComponentProps) => {
   const [ip, setIp] = useState("");
 
   /**
-   * Valida el format d'una adreça IP mentre s'escriu
+   * Validar y gestionar entrada
    */
-  const isValidFormat = (value: string): boolean =>
-    /^[0-9.]*$/.test(value) &&
-    !value.split(".").some((part) => part.length > 3) &&
-    value.split(".").length <= 4;
-
-  /**
-   * Gestiona l'enviament del formulari
-   */
-  const handleSubmit = (e: FormEvent): void => {
-    e.preventDefault();
-    if (ip.trim() && onSearch) onSearch(ip.trim());
-  };
-
-  /**
-   * Gestiona l'entrada de text validant el format
-   */
-  const handleInput = (e: ChangeEvent<HTMLInputElement>): void => {
-    if (isValidFormat(e.target.value)) {
-      setIp(e.target.value);
-    }
-  };
+  const isValid = (v: string) =>
+    /^[0-9.]*$/.test(v) &&
+    !v.split(".").some((p) => p.length > 3) &&
+    v.split(".").length <= 4;
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        if (ip.trim() && onSearch) onSearch(ip.trim());
+      }}
+    >
       <div className="input-group">
         <input
           type="text"
           className="form-control bg-black text-white border-secondary"
           value={ip}
-          onChange={handleInput}
+          onChange={(e) => isValid(e.target.value) && setIp(e.target.value)}
           onPaste={(e) => {
             const text = e.clipboardData.getData("text");
-            if (!isValidFormat(text)) e.preventDefault();
+            if (!isValid(text)) e.preventDefault();
           }}
           placeholder="8.8.8.8"
           pattern="^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"
