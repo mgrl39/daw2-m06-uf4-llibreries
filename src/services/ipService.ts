@@ -6,7 +6,7 @@ import { IpInfo, Holiday } from "../types/IpInfo";
  * Obtenir les dades básiques + festius
  */
 
-const API = {
+const API: { IP: string; HOLIDAYS: string } = {
   IP: "https://ipapi.co/",
   HOLIDAYS: "https://date.nager.at/api/v3/publicholidays/",
 };
@@ -16,7 +16,7 @@ export const getIpInfo = async (
 ): Promise<{ ipInfo: IpInfo; holidays: Holiday[] }> => {
   try {
     // Consulta IP
-    const { data } = await axios.get(`${API.IP}${ip}/json/`);
+    const { data }: { data: any } = await axios.get(`${API.IP}${ip}/json/`);
 
     // Mapeja resposta
     const ipInfo: IpInfo = {
@@ -39,33 +39,44 @@ export const getIpInfo = async (
       languages: data.languages,
     };
 
-    // Consulta festius
+    // Consulta festius - Versió simplificada
     let holidays: Holiday[] = [];
     if (ipInfo.countryCode) {
       try {
-        const year = new Date().getFullYear();
-        const { data: festius } = await axios.get<Holiday[]>(
-          `${API.HOLIDAYS}${year}/${ipInfo.countryCode}`
+        // 1. Obtenim festius de l'any actual pel país
+        const any: number = new Date().getFullYear();
+        const resposta = await axios.get<Holiday[]>(
+          `${API.HOLIDAYS}${any}/${ipInfo.countryCode}`
         );
+        const totsFestius: Holiday[] = resposta.data;
+        const avui: Date = new Date();
 
-        const today = new Date();
+        // 2. Separem festius en futurs i passats
+        const festiusFuturs: Holiday[] = [];
+        const festiusPassats: Holiday[] = [];
 
-        // Obté els propers festius o els més recents
-        holidays = festius
-          .filter((h) => new Date(h.date) >= today)
-          .sort(
-            (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
-          )
-          .slice(0, 5);
+        // Classifiquem cada festiu
+        totsFestius.forEach((festiu: Holiday) => {
+          const dataFestiu = new Date(festiu.date);
+          if (dataFestiu >= avui) festiusFuturs.push(festiu);
+          else festiusPassats.push(festiu);
+        });
 
-        if (holidays.length === 0) {
-          holidays = festius
-            .sort(
-              (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-            )
-            .slice(0, 5);
+        // 3. Decidim quins mostrar
+        if (festiusFuturs.length > 0) {
+          // Si hi ha festius futurs, ordenem per data ascendent (els més propers primer)
+          festiusFuturs.sort((a, b) => {
+            return new Date(a.date).getTime() - new Date(b.date).getTime();
+          });
+          holidays = festiusFuturs.slice(0, 5); // Agafem els 5 primers
+        } else {
+          // Si no hi ha festius futurs, mostrem els 5 passats més recents
+          festiusPassats.sort((a, b) => {
+            return new Date(b.date).getTime() - new Date(a.date).getTime();
+          });
+          holidays = festiusPassats.slice(0, 5); // Agafem els 5 primers
         }
-      } catch (error) {
+      } catch (error: any) {
         console.log("Error consultant festius:", error);
       }
     }
@@ -77,9 +88,9 @@ export const getIpInfo = async (
       ipInfo: {
         status: "fail",
         message:
-          error.response?.status === 429
+          error.response?.status == 429
             ? "Límit de consultes excedit"
-            : error.response?.status === 404
+            : error.response?.status == 404
             ? `IP no trobada: ${ip}`
             : "Error consultant IP",
         query: ip,

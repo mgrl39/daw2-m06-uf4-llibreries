@@ -30,6 +30,5 @@ const renderApp = () => {
  * Si el document està completament carregat, renderitza l'aplicació
  * Si no, espera a que el document estigui completament carregat
  */
-document.readyState === "complete"
-  ? renderApp()
-  : window.addEventListener("load", renderApp);
+if (document.readyState == "complete") renderApp();
+else window.addEventListener("load", renderApp);

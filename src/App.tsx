@@ -20,13 +20,13 @@ const mapStyles = [
  * Component principal de l'aplicació
  */
 export default function App() {
-  const [ipInfo, setIpInfo] = useState<IpInfo | undefined>();
+  const [ipInfo, setIpInfo] = useState<IpInfo | undefined>(undefined);
   const [holidays, setHolidays] = useState<Holiday[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string>();
-  const [showErr, setShowErr] = useState(false);
-  const [showHolidays, setShowHolidays] = useState(false);
-  const [styleIdx, setStyleIdx] = useState(0);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | undefined>(undefined);
+  const [showErr, setShowErr] = useState<boolean>(false);
+  const [showHolidays, setShowHolidays] = useState<boolean>(false);
+  const [styleIdx, setStyleIdx] = useState<number>(0);
 
   /**
    * Mostra i oculta errors automàticament
@@ -49,26 +49,26 @@ export default function App() {
    * Cerca informació per una IP
    * Gestiona errors de l'API i actualitza l'estat
    */
-  const handleSearch = async (ipAddr: string) => {
+  const handleSearch = async (ipAddr: string): Promise<void> => {
     setLoading(true);
     setError(undefined);
 
     try {
-      const { ipInfo, holidays } = await getIpInfo(ipAddr);
+      const { ipInfo, holidays }: { ipInfo: IpInfo; holidays: Holiday[] } =
+        await getIpInfo(ipAddr);
       setIpInfo(ipInfo);
       setHolidays(holidays);
 
-      if (ipInfo.status === "fail") {
-        setError(ipInfo.message || `No hay datos para: ${ipAddr}`);
+      if (ipInfo.status == "fail") {
+        setError(ipInfo.message || `No hi ha dades per a: ${ipAddr}`);
       }
     } catch (err: any) {
-      setError(
-        err?.response?.status === 404
-          ? `IP no encontrada: ${ipAddr}`
-          : err?.message?.includes("Network")
-          ? "Error de conexión"
-          : `Error: ${ipAddr}`
-      );
+      let errorMsg: string = `Error: ${ipAddr}`;
+
+      if (err?.response?.status == 404) errorMsg = `IP no trobada: ${ipAddr}`;
+      else if (err?.message?.includes("Network"))
+        errorMsg = "Error de connexió";
+      setError(errorMsg);
     } finally {
       setLoading(false);
     }

@@ -1,12 +1,12 @@
 /**
- * Información básica de IP
+ * Informació bàsica d'IP
  */
 export interface IpInfo {
   query: string;
   status: "success" | "fail";
   message?: string;
 
-  // Datos de ubicación
+  // Dades d'ubicació
   city: string;
   country: string;
   countryCode: string;
@@ -16,7 +16,7 @@ export interface IpInfo {
   lat: number;
   lon: number;
 
-  // Datos adicionales
+  // Dades addicionals
   timezone: string;
   isp: string;
   org?: string;
@@ -27,7 +27,7 @@ export interface IpInfo {
 }
 
 /**
- * Información de festivos
+ * Informació de festius
  */
 export interface Holiday {
   date: string;
@@ -42,7 +42,7 @@ export interface Holiday {
 }
 
 /**
- * Props unificados para componentes
+ * Props unificats per components
  */
 export interface ComponentProps {
   ipInfo?: IpInfo;
