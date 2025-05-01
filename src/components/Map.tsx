@@ -7,23 +7,24 @@ import icon from "leaflet/dist/images/marker-icon.png";
 import iconShadow from "leaflet/dist/images/marker-shadow.png";
 
 /**
- * Configuració dels marcadors al mapa
+ * Icones pels marcadors
  */
-const currentMarkerIcon = new Icon({
-  iconUrl: icon,
-  shadowUrl: iconShadow,
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-  className: "current-marker",
-});
-
-const historyMarkerIcon = new Icon({
-  iconUrl: icon,
-  shadowUrl: iconShadow,
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-  className: "history-marker",
-});
+const markerIcons = {
+  current: new Icon({
+    iconUrl: icon,
+    shadowUrl: iconShadow,
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    className: "current-marker",
+  }),
+  history: new Icon({
+    iconUrl: icon,
+    shadowUrl: iconShadow,
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    className: "history-marker",
+  }),
+};
 
 /**
  * URLs dels estils de mapa disponibles
@@ -37,9 +38,9 @@ const mapUrls = [
 ];
 
 /**
- * Component per centrar el mapa en una posició
+ * Component per volar al punt seleccionat
  */
-function FlyToMarker({ position }: { position: LatLngTuple }) {
+const FlyToMarker = ({ position }: { position: LatLngTuple }) => {
   const map = useMap();
 
   useEffect(() => {
@@ -50,7 +51,7 @@ function FlyToMarker({ position }: { position: LatLngTuple }) {
   }, [map, position]);
 
   return null;
-}
+};
 
 /**
  * Interfície per emmagatzemar els punts anteriors
@@ -70,57 +71,46 @@ export default function Map({ ipInfo, styleIdx = 0 }: ComponentProps) {
   const [savedPoints, setSavedPoints] = useState<SavedPoint[]>([]);
   const [currentPoint, setCurrentPoint] = useState<SavedPoint | null>(null);
 
-  const hasValidCoordinates =
+  const hasValidCoords =
     ipInfo &&
     ipInfo.status === "success" &&
     typeof ipInfo.lat === "number" &&
     typeof ipInfo.lon === "number";
 
-  const pos: LatLngTuple = hasValidCoordinates
+  const pos: LatLngTuple = hasValidCoords
     ? [ipInfo.lat, ipInfo.lon]
     : defaultPos;
 
   // Afegeix el nou punt a l'historial quan canvia la IP
   useEffect(() => {
-    if (hasValidCoordinates && ipInfo) {
-      const newPoint: SavedPoint = {
-        id: ipInfo.query,
-        position: [ipInfo.lat, ipInfo.lon] as LatLngTuple,
-        info: ipInfo,
-        timestamp: Date.now(),
-      };
+    if (!hasValidCoords || !ipInfo) return;
 
-      // Comprova si el punt ja existeix a l'historial
-      const pointExists = savedPoints.some(
-        (point) => point.id === ipInfo.query
-      );
+    const newPoint: SavedPoint = {
+      id: ipInfo.query,
+      position: [ipInfo.lat, ipInfo.lon] as LatLngTuple,
+      info: ipInfo,
+      timestamp: Date.now(),
+    };
 
-      if (!pointExists) {
-        setSavedPoints((prev) => [...prev, newPoint]);
-      }
-
-      // Actualitza el punt actual
-      setCurrentPoint(newPoint);
+    if (!savedPoints.some((p) => p.id === ipInfo.query)) {
+      setSavedPoints((prev) => [...prev, newPoint]);
     }
-  }, [ipInfo, hasValidCoordinates]);
 
-  // Neteja tots els punts
-  const handleClearAllPoints = () => {
-    setSavedPoints(currentPoint ? [currentPoint] : []);
-  };
+    setCurrentPoint(newPoint);
+  }, [ipInfo, hasValidCoords]);
 
   return (
     <div className="h-100 w-100 position-relative">
       <MapContainer
         center={pos}
-        zoom={hasValidCoordinates ? 12 : 3}
+        zoom={hasValidCoords ? 12 : 3}
         style={{ width: "100%", height: "100%", minHeight: "400px" }}
         zoomControl={true}
       >
         <TileLayer url={mapUrls[styleIdx || 0]} attribution="" />
 
         {/* Component per situar el mapa automàticament */}
-        {hasValidCoordinates && <FlyToMarker position={pos} />}
+        {hasValidCoords && <FlyToMarker position={pos} />}
 
         {/* Mostrar tots els punts guardats excepte l'actual */}
         {savedPoints.map((point) => {
@@ -129,7 +119,7 @@ export default function Map({ ipInfo, styleIdx = 0 }: ComponentProps) {
             <Marker
               key={point.id}
               position={point.position}
-              icon={isCurrent ? currentMarkerIcon : historyMarkerIcon}
+              icon={isCurrent ? markerIcons.current : markerIcons.history}
               zIndexOffset={isCurrent ? 1000 : 0}
             >
               <Popup>
@@ -162,7 +152,7 @@ export default function Map({ ipInfo, styleIdx = 0 }: ComponentProps) {
       {savedPoints.length > 1 && (
         <button
           className="btn btn-sm btn-danger position-absolute top-0 end-0 m-2"
-          onClick={handleClearAllPoints}
+          onClick={() => setSavedPoints(currentPoint ? [currentPoint] : [])}
           style={{ zIndex: 1000 }}
         >
           <i className="bi bi-trash"></i> Netejar historial
