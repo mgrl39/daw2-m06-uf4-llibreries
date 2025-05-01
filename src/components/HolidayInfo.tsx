@@ -35,7 +35,7 @@ const HolidayInfo = ({
                 year: "numeric",
               })}
             </div>
-            <div className="mt-1">{h.localName}</div>
+            <div className="mt-1 text-white">{h.localName}</div>
             {h.localName !== h.name && (
               <div className="small text-secondary">{h.name}</div>
             )}
