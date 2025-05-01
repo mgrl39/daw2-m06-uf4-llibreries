@@ -1,10 +1,10 @@
 import { useState, FormEvent, ChangeEvent } from "react";
-import { Props } from "../types/IpInfo";
+import { ComponentProps } from "../types/IpInfo";
 
 /**
  * Component per cercar informació d'una adreça IP
  */
-const IpSearch = ({ onSearch, isLoading }: Props) => {
+const IpSearch = ({ onSearch, isLoading }: ComponentProps) => {
   const [ip, setIp] = useState("");
 
   /**
@@ -20,7 +20,7 @@ const IpSearch = ({ onSearch, isLoading }: Props) => {
    */
   const handleSubmit = (e: FormEvent): void => {
     e.preventDefault();
-    if (ip.trim()) onSearch(ip.trim());
+    if (ip.trim() && onSearch) onSearch(ip.trim());
   };
 
   /**

@@ -12,7 +12,6 @@ import "./assets/styles.css";
 import App from "./App";
 
 /**
- * Funció per renderitzar l'aplicació
  * Renderitza l'aplicació dins l'element amb id 'root'
  * Envolta l'aplicació en StrictMode per detectar problemes potencials
  */
@@ -27,9 +26,10 @@ const renderApp = () => {
   }
 };
 
-/* Assegurar que els estils estan carregats abans de renderitzar
+/* Espera a que se carguen los estilos
  * Si el document està completament carregat, renderitza l'aplicació
  * Si no, espera a que el document estigui completament carregat
  */
-if (document.readyState == "complete") renderApp();
-else window.addEventListener("load", renderApp);
+document.readyState === "complete"
+  ? renderApp()
+  : window.addEventListener("load", renderApp);

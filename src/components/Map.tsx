@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import { Icon, LatLngTuple } from "leaflet";
 import "leaflet/dist/leaflet.css";
-import { CombinedIpInfo, IpApiResponse } from "../types/IpInfo";
+import { IpInfo, ComponentProps } from "../types/IpInfo";
 import icon from "leaflet/dist/images/marker-icon.png";
 import iconShadow from "leaflet/dist/images/marker-shadow.png";
 
@@ -58,47 +58,41 @@ function FlyToMarker({ position }: { position: LatLngTuple }) {
 interface SavedPoint {
   id: string;
   position: LatLngTuple;
-  info: IpApiResponse;
+  info: IpInfo;
   timestamp: number;
 }
 
 /**
  * Component principal del mapa
  */
-export default function Map({
-  ipInfo,
-  styleIdx,
-}: {
-  ipInfo?: CombinedIpInfo;
-  styleIdx: number;
-}) {
+export default function Map({ ipInfo, styleIdx = 0 }: ComponentProps) {
   const defaultPos: LatLngTuple = [40, 0];
   const [savedPoints, setSavedPoints] = useState<SavedPoint[]>([]);
   const [currentPoint, setCurrentPoint] = useState<SavedPoint | null>(null);
 
   const hasValidCoordinates =
     ipInfo &&
-    ipInfo.ipApi.status === "success" &&
-    typeof ipInfo.ipApi.lat === "number" &&
-    typeof ipInfo.ipApi.lon === "number";
+    ipInfo.status === "success" &&
+    typeof ipInfo.lat === "number" &&
+    typeof ipInfo.lon === "number";
 
   const pos: LatLngTuple = hasValidCoordinates
-    ? [ipInfo.ipApi.lat, ipInfo.ipApi.lon]
+    ? [ipInfo.lat, ipInfo.lon]
     : defaultPos;
 
   // Afegeix el nou punt a l'historial quan canvia la IP
   useEffect(() => {
     if (hasValidCoordinates && ipInfo) {
       const newPoint: SavedPoint = {
-        id: ipInfo.ipApi.query,
-        position: [ipInfo.ipApi.lat, ipInfo.ipApi.lon] as LatLngTuple,
-        info: ipInfo.ipApi,
+        id: ipInfo.query,
+        position: [ipInfo.lat, ipInfo.lon] as LatLngTuple,
+        info: ipInfo,
         timestamp: Date.now(),
       };
 
       // Comprova si el punt ja existeix a l'historial
       const pointExists = savedPoints.some(
-        (point) => point.id === ipInfo.ipApi.query
+        (point) => point.id === ipInfo.query
       );
 
       if (!pointExists) {
@@ -112,10 +106,7 @@ export default function Map({
 
   // Neteja tots els punts
   const handleClearAllPoints = () => {
-    setSavedPoints([]);
-    if (currentPoint) {
-      setSavedPoints([currentPoint]);
-    }
+    setSavedPoints(currentPoint ? [currentPoint] : []);
   };
 
   return (
@@ -126,7 +117,7 @@ export default function Map({
         style={{ width: "100%", height: "100%", minHeight: "400px" }}
         zoomControl={true}
       >
-        <TileLayer url={mapUrls[styleIdx]} attribution="" />
+        <TileLayer url={mapUrls[styleIdx || 0]} attribution="" />
 
         {/* Component per situar el mapa automàticament */}
         {hasValidCoordinates && <FlyToMarker position={pos} />}

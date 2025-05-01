@@ -1,16 +1,12 @@
-import { HolidayInfo as HolidayInfoType } from "../types/IpInfo";
+import { ComponentProps } from "../types/IpInfo";
 
-interface HolidayInfoProps {
-  holidays: HolidayInfoType[];
-  country: string;
-  isVisible: boolean;
-}
-
-/**
- * Component per mostrar els dies festius d'un país
- */
-const HolidayInfo = ({ holidays, country, isVisible }: HolidayInfoProps) => {
-  if (!isVisible || holidays.length === 0) return null;
+// Componente para mostrar festivos
+const HolidayInfo = ({
+  holidays = [],
+  country = "",
+  isVisible = false,
+}: ComponentProps) => {
+  if (!isVisible || !holidays?.length) return null;
 
   return (
     <div

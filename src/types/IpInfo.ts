@@ -1,5 +1,5 @@
 /**
- * Dades rebudes directament de l'API ipapi.co
+ * API de IP - Lo que recibimos en bruto
  */
 export interface IpapiResponse {
   ip: string;
@@ -7,18 +7,11 @@ export interface IpapiResponse {
   region: string;
   region_code: string;
   country_code: string;
-  country_code_iso3: string;
   country_name: string;
-  country_capital: string;
-  country_tld: string;
-  continent_code: string;
-  in_eu: boolean;
   postal: string;
   latitude: number;
   longitude: number;
   timezone: string;
-  utc_offset: string;
-  country_calling_code: string;
   currency: string;
   currency_name: string;
   languages: string;
@@ -27,17 +20,17 @@ export interface IpapiResponse {
 }
 
 /**
- * Resposta adaptada d'IP
+ * Información de IP procesada para uso interno
  */
-export interface IpApiResponse {
-  status: string;
-  message?: string;
+export interface IpInfo {
   query: string;
+  status: "success" | "fail";
+  message?: string;
+  city: string;
   country: string;
   countryCode: string;
   region?: string;
   regionName?: string;
-  city: string;
   zip?: string;
   lat: number;
   lon: number;
@@ -51,9 +44,9 @@ export interface IpApiResponse {
 }
 
 /**
- * Dades de dies festius
+ * Información de festivos
  */
-export interface HolidayInfo {
+export interface Holiday {
   date: string;
   localName: string;
   name: string;
@@ -66,17 +59,14 @@ export interface HolidayInfo {
 }
 
 /**
- * Dades combinades de l'IP i els dies festius
+ * Props unificados para componentes
  */
-export interface CombinedIpInfo {
-  ipApi: IpApiResponse;
-  holidays: HolidayInfo[];
+export interface ComponentProps {
+  ipInfo?: IpInfo;
+  holidays?: Holiday[];
+  country?: string;
+  isVisible?: boolean;
+  isLoading?: boolean;
+  onSearch?: (ip: string) => void;
+  styleIdx?: number;
 }
-
-/**
- * Props per al component IpSearch
- */
-export type Props = {
-  onSearch: (ip: string) => void;
-  isLoading: boolean;
-};
