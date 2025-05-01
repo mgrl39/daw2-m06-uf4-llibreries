@@ -23,51 +23,50 @@ const HolidayInfo = ({
       </div>
 
       <div className="p-2">
-        {holidays.map((holiday, index) => {
-          const dataFestiu = new Date(holiday.date);
-          const dataFormatada = dataFestiu.toLocaleDateString("ca-ES", {
-            day: "numeric",
-            month: "long",
-            year: "numeric",
-          });
+        {holidays.map((h, i) => (
+          <div
+            key={i}
+            className="p-2 mb-2 bg-dark rounded border border-secondary"
+          >
+            <div className="text-info fw-bold">
+              {new Date(h.date).toLocaleDateString("ca-ES", {
+                day: "numeric",
+                month: "long",
+                year: "numeric",
+              })}
+            </div>
+            <div className="mt-1">{h.localName}</div>
+            {h.localName !== h.name && (
+              <div className="small text-secondary">{h.name}</div>
+            )}
 
-          return (
-            <div
-              key={index}
-              className="p-2 mb-2 bg-dark rounded border border-secondary"
-            >
-              <div className="text-info fw-bold">{dataFormatada}</div>
-              <div className="mt-1">{holiday.localName}</div>
-              {holiday.localName !== holiday.name && (
-                <div className="small text-secondary">{holiday.name}</div>
+            <div className="mt-2 d-flex flex-wrap gap-1">
+              <span
+                className={`badge ${
+                  h.global ? "bg-success" : "bg-warning text-dark"
+                }`}
+              >
+                {h.global ? "Nacional" : "Regional"}
+              </span>
+
+              {h.counties && h.counties.length > 0 && (
+                <span
+                  className="badge bg-info text-dark"
+                  title={h.counties.join(", ")}
+                >
+                  {h.counties.length} regions
+                </span>
               )}
 
-              <div className="mt-2 d-flex flex-wrap gap-1">
-                {holiday.global ? (
-                  <span className="badge bg-success">Nacional</span>
-                ) : (
-                  <span className="badge bg-warning text-dark">Regional</span>
-                )}
-
-                {holiday.counties && holiday.counties.length > 0 && (
-                  <span
-                    className="badge bg-info text-dark"
-                    title={holiday.counties.join(", ")}
-                  >
-                    {holiday.counties.length} regions
+              {h.types &&
+                h.types.map((type, j) => (
+                  <span key={j} className="badge bg-secondary">
+                    {type}
                   </span>
-                )}
-
-                {holiday.types &&
-                  holiday.types.map((type, i) => (
-                    <span key={i} className="badge bg-secondary">
-                      {type}
-                    </span>
-                  ))}
-              </div>
+                ))}
             </div>
-          );
-        })}
+          </div>
+        ))}
       </div>
     </div>
   );
