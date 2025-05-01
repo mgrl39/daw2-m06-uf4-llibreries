@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
-import { Icon, LatLngTuple, DivIcon } from "leaflet";
+import { Icon, LatLngTuple } from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { CombinedIpInfo, IpApiResponse } from "../types/IpInfo";
 import icon from "leaflet/dist/images/marker-icon.png";

@@ -17,6 +17,8 @@ body {
   background-color: #222;
   color: white;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+  border-radius: 6px;
+  transition: all 0.3s;
 }
 
 .leaflet-bar a {
@@ -36,16 +38,14 @@ body {
   letter-spacing: 1px;
 }
 
-/* Estil per al marcador actual */
+/* Estils dels marcadors */
 .current-marker {
   filter: hue-rotate(120deg) brightness(1.2) !important;
   z-index: 1000;
-  transition: all 0.3s;
   transform-origin: bottom center;
   animation: bounce 0.5s ease-in-out;
 }
 
-/* Estil per als marcadors històrics */
 .history-marker {
   filter: grayscale(0.7) opacity(0.8) !important;
   transition: all 0.3s;
@@ -66,11 +66,4 @@ body {
   100% {
     transform: translateY(0);
   }
-}
-
-/* Efecte al mostrar el popup - Redeficit per override */
-.leaflet-popup-content-wrapper {
-  border-radius: 6px;
-  box-shadow: 0 3px 14px rgba(0, 0, 0, 0.4);
-  transition: all 0.3s;
 }
