@@ -26,7 +26,7 @@ const renderApp = () => {
   }
 };
 
-/* Espera a que se carguen los estilos
+/**
  * Si el document està completament carregat, renderitza l'aplicació
  * Si no, espera a que el document estigui completament carregat
  */

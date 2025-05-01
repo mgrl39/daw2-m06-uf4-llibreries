@@ -1,6 +1,6 @@
 import { ComponentProps } from "../types/IpInfo";
 
-// Componente para mostrar festivos
+// Component per mostrar festius
 const HolidayInfo = ({
   holidays = [],
   country = "",
