@@ -15,7 +15,7 @@ import App from "./App";
  * Renderitza l'aplicació dins l'element amb id 'root'
  * Envolta l'aplicació en StrictMode per detectar problemes potencials
  */
-const renderApp = () => {
+function renderApp() {
   const rootElement = document.getElementById("root");
   if (rootElement) {
     createRoot(rootElement).render(
@@ -24,9 +24,11 @@ const renderApp = () => {
       </StrictMode>
     );
   }
-};
+  document.documentElement.classList.add("content-loaded");
+}
 
 /**
+ * Lògica unificada per a carregar l'aplicació
  * Si el document està completament carregat, renderitza l'aplicació
  * Si no, espera a que el document estigui completament carregat
  */

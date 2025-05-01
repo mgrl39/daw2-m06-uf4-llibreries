@@ -11,6 +11,11 @@ const API: { IP: string; HOLIDAYS: string } = {
   HOLIDAYS: "https://date.nager.at/api/v3/publicholidays/",
 };
 
+/**
+ * Per a no tenir problemes amb els errors, agafem el codi d'error
+ * i es manipula segons el nostre criteri. D'aquesta manera,
+ * no he de crear-ne una lògica de tractament d'errors.
+ */
 export const getIpInfo = async (
   ip: string
 ): Promise<{ ipInfo: IpInfo; holidays: Holiday[] }> => {
@@ -18,7 +23,7 @@ export const getIpInfo = async (
     // Consulta IP
     const { data }: { data: any } = await axios.get(`${API.IP}${ip}/json/`);
 
-    // Mapeja resposta
+    // Mapejar resposta
     const ipInfo: IpInfo = {
       status: "success",
       query: ip,
@@ -39,7 +44,7 @@ export const getIpInfo = async (
       languages: data.languages,
     };
 
-    // Consulta festius - Versió simplificada
+    // Consulta festius
     let holidays: Holiday[] = [];
     if (ipInfo.countryCode) {
       try {

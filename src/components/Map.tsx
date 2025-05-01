@@ -73,9 +73,9 @@ export default function Map({ ipInfo, styleIdx = 0 }: ComponentProps) {
 
   const hasValidCoords =
     ipInfo &&
-    ipInfo.status === "success" &&
-    typeof ipInfo.lat === "number" &&
-    typeof ipInfo.lon === "number";
+    ipInfo.status == "success" &&
+    typeof ipInfo.lat == "number" &&
+    typeof ipInfo.lon == "number";
 
   const pos: LatLngTuple = hasValidCoords
     ? [ipInfo.lat, ipInfo.lon]
@@ -92,7 +92,7 @@ export default function Map({ ipInfo, styleIdx = 0 }: ComponentProps) {
       timestamp: Date.now(),
     };
 
-    if (!savedPoints.some((p) => p.id === ipInfo.query)) {
+    if (!savedPoints.some((p) => p.id == ipInfo.query)) {
       setSavedPoints((prev) => [...prev, newPoint]);
     }
 
@@ -114,7 +114,7 @@ export default function Map({ ipInfo, styleIdx = 0 }: ComponentProps) {
 
         {/* Mostrar tots els punts guardats excepte l'actual */}
         {savedPoints.map((point) => {
-          const isCurrent = currentPoint && point.id === currentPoint.id;
+          const isCurrent = currentPoint && point.id == currentPoint.id;
           return (
             <Marker
               key={point.id}
@@ -166,7 +166,7 @@ export default function Map({ ipInfo, styleIdx = 0 }: ComponentProps) {
           style={{ zIndex: 1000 }}
         >
           <small>
-            {savedPoints.length} {savedPoints.length === 1 ? "punt" : "punts"}{" "}
+            {savedPoints.length} {savedPoints.length == 1 ? "punt" : "punts"}{" "}
             marcats
           </small>
         </div>
