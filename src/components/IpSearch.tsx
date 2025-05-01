@@ -37,16 +37,16 @@ const IpSearch = ({ onSearch, isLoading }: Props) => {
       <div className="input-group">
         <input
           type="text"
-          className="form-control bg-dark text-white border-secondary"
+          className="form-control bg-black text-white border-secondary"
           value={ip}
           onChange={handleInput}
           onPaste={(e) => {
             const text = e.clipboardData.getData("text");
             if (!isValidFormat(text)) e.preventDefault();
           }}
-          placeholder="Introdueix una IP (Ex: 8.8.8.8)"
+          placeholder="8.8.8.8"
           pattern="^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"
-          title="IP vàlida (format: xxx.xxx.xxx.xxx)"
+          title="Format d'IP vàlid: xxx.xxx.xxx.xxx"
           required
           disabled={isLoading}
           maxLength={15}

@@ -6,20 +6,19 @@ import { IpApiResponse, HolidayInfo, CombinedIpInfo } from "../types/IpInfo";
  * Obtenir les dades básiques + festius
  */
 
-export const IP_API_ENDPOINT: string = `https://ipapi.co/`;
-export const HOLIDAYS_API_ENDPOINT: string = `https://date.nager.at/api/v3/publicholidays/`;
+export const IP_API_ENDPOINT = "https://ipapi.co/";
+export const HOLIDAYS_API_ENDPOINT =
+  "https://date.nager.at/api/v3/publicholidays/";
 
 export const getIpInfo = async (ip: string): Promise<CombinedIpInfo> => {
   try {
-    // Obtener información básica de la IP
+    // Obtenció d'informació bàsica de la IP
     const ipData = await axios.get<IpApiResponse>(
       `${IP_API_ENDPOINT}${ip}/json/`,
-      {
-        headers: { Accept: "application/json" },
-      }
+      { headers: { Accept: "application/json" } }
     );
 
-    // Adapt response to match our expected format
+    // Adaptació de la resposta al nostre format
     const adaptedData: IpApiResponse = {
       status: "success",
       query: ip,
@@ -39,10 +38,9 @@ export const getIpInfo = async (ip: string): Promise<CombinedIpInfo> => {
 
     let holidays: HolidayInfo[] = [];
 
-    // Solo buscar festivos si tiene código de país
+    // Cerca de festius si hi ha codi de país
     if (adaptedData.countryCode) {
       try {
-        // Obtener festivos del año actual
         const currentYear = new Date().getFullYear();
         const holidaysResponse = await axios.get<HolidayInfo[]>(
           `${HOLIDAYS_API_ENDPOINT}${currentYear}/${adaptedData.countryCode}`,
@@ -50,8 +48,9 @@ export const getIpInfo = async (ip: string): Promise<CombinedIpInfo> => {
         );
 
         if (holidaysResponse.data) {
-          // Procesamiento de festivos (sin cambios)
           const today = new Date();
+
+          // Intenta obtenir els propers festius
           holidays = holidaysResponse.data
             .filter((h) => new Date(h.date) >= today)
             .sort(
@@ -59,6 +58,7 @@ export const getIpInfo = async (ip: string): Promise<CombinedIpInfo> => {
             )
             .slice(0, 5);
 
+          // Si no hi ha propers festius, mostra els més recents
           if (holidays.length === 0) {
             holidays = holidaysResponse.data
               .sort(
@@ -69,7 +69,7 @@ export const getIpInfo = async (ip: string): Promise<CombinedIpInfo> => {
           }
         }
       } catch (error) {
-        console.log("Error fetching holidays data:", error);
+        console.log("Error obtenint dades de festius:", error);
       }
     }
 
@@ -79,15 +79,16 @@ export const getIpInfo = async (ip: string): Promise<CombinedIpInfo> => {
     };
   } catch (error: any) {
     console.error(`Error IP ${ip}:`, error);
-    // Create a fallback response for error case
+
+    // Resposta per casos d'error
     const errorResponse: IpApiResponse = {
       status: "fail",
       message:
         error.response?.status === 429
-          ? "Rate limit exceeded. Try again later."
+          ? "Límit de consultes excedit. Torna a provar més tard."
           : error.response?.status === 404
-          ? `IP not found: ${ip}`
-          : "Could not get IP information",
+          ? `IP no trobada: ${ip}`
+          : "No s'ha pogut obtenir informació de la IP",
       query: ip,
       country: "",
       countryCode: "",

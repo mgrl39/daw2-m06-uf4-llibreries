@@ -37,24 +37,20 @@ export default function Map({
   styleIdx: number;
 }) {
   const defaultPos: LatLngTuple = [40, 0];
-  let pos: LatLngTuple = defaultPos;
 
-  /**
-   * Verifica que les coordenades són vàlides abans d'assignar-les
-   */
   const hasValidCoordinates =
     ipInfo &&
     ipInfo.ipApi.status === "success" &&
     typeof ipInfo.ipApi.lat === "number" &&
     typeof ipInfo.ipApi.lon === "number";
 
-  if (hasValidCoordinates) {
-    pos = [ipInfo.ipApi.lat, ipInfo.ipApi.lon];
-  }
+  const pos: LatLngTuple = hasValidCoordinates
+    ? [ipInfo.ipApi.lat, ipInfo.ipApi.lon]
+    : defaultPos;
 
   return (
     <MapContainer
-      center={hasValidCoordinates ? pos : defaultPos}
+      center={pos}
       zoom={hasValidCoordinates ? 13 : 3}
       style={{ width: "100%", height: "100%" }}
       zoomControl={true}
@@ -64,16 +60,30 @@ export default function Map({
       {hasValidCoordinates && (
         <Marker position={pos} icon={mapIcon}>
           <Popup>
-            <div>
-              <div className="fw-bold mb-2">IP: {ipInfo.ipApi.query}</div>
-              <p className="mb-1">
-                📍 {ipInfo.ipApi.city}, {ipInfo.ipApi.country}
-              </p>
-              <p className="mb-1">🌐 {ipInfo.ipApi.isp}</p>
+            <div className="py-1">
+              <div className="fw-bold mb-2 border-bottom pb-1">
+                {ipInfo.ipApi.query}
+              </div>
+              <div className="mb-1 small">
+                <i className="bi bi-geo-alt me-1"></i>
+                {ipInfo.ipApi.city}, {ipInfo.ipApi.country}
+              </div>
+              <div className="mb-1 small">
+                <i className="bi bi-globe me-1"></i>
+                {ipInfo.ipApi.isp}
+              </div>
               {ipInfo.ipApi.org && (
-                <p className="mb-1">🏢 {ipInfo.ipApi.org}</p>
+                <div className="mb-1 small">
+                  <i className="bi bi-building me-1"></i>
+                  {ipInfo.ipApi.org}
+                </div>
               )}
-              {ipInfo.ipApi.as && <p className="mb-0">🔌 {ipInfo.ipApi.as}</p>}
+              {ipInfo.ipApi.as && (
+                <div className="small">
+                  <i className="bi bi-hdd-network me-1"></i>
+                  {ipInfo.ipApi.as}
+                </div>
+              )}
             </div>
           </Popup>
         </Marker>

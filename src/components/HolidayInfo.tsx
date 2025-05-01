@@ -14,22 +14,19 @@ const HolidayInfo = ({ holidays, country, isVisible }: HolidayInfoProps) => {
 
   return (
     <div
-      className="position-absolute bottom-0 end-0 m-3 bg-dark border border-secondary rounded overflow-auto text-white"
-      style={{ width: "300px", maxHeight: "350px", zIndex: 1000 }}
+      className="position-absolute bottom-0 end-0 m-3 bg-black border border-secondary rounded shadow text-white"
+      style={{ width: "280px", maxHeight: "350px", zIndex: 1000 }}
     >
       <div className="p-3 border-bottom border-secondary">
-        <h5 className="mb-1">🎉 Dies festius a {country}</h5>
+        <h6 className="mb-1 fw-bold">Dies festius: {country}</h6>
         <small className="text-secondary">
-          {new Date() > new Date(holidays[0].date)
-            ? "Festius més recents de "
-            : "Propers festius de "}
-          {new Date().getFullYear()}
+          {new Date() > new Date(holidays[0].date) ? "Recents" : "Propers"} (
+          {new Date().getFullYear()})
         </small>
       </div>
 
       <ul className="list-unstyled m-0">
         {holidays.map((holiday, index) => {
-          // Formatem la data per mostrar-la
           const dataFestiu = new Date(holiday.date);
           const dataFormatada = dataFestiu.toLocaleDateString("ca-ES", {
             day: "numeric",
@@ -37,13 +34,11 @@ const HolidayInfo = ({ holidays, country, isVisible }: HolidayInfoProps) => {
           });
 
           return (
-            <li key={index} className="p-3 border-bottom border-secondary">
-              <div className="fw-bold text-primary">{dataFormatada}</div>
-              <div className="text-white">{holiday.localName}</div>
+            <li key={index} className="p-2 border-bottom border-secondary">
+              <div className="fw-bold text-primary small">{dataFormatada}</div>
+              <div className="mt-1">{holiday.localName}</div>
               {holiday.localName !== holiday.name && (
-                <div className="small text-light fst-italic">
-                  {holiday.name}
-                </div>
+                <div className="small text-secondary">{holiday.name}</div>
               )}
             </li>
           );

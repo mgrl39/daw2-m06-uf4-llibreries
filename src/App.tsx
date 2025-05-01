@@ -41,11 +41,7 @@ export default function App() {
    * Mostra les festivitats quan hi ha informació d'IP
    */
   useEffect(() => {
-    if (ip && ip.holidays.length > 0) {
-      setShowHolidays(true);
-    } else {
-      setShowHolidays(false);
-    }
+    setShowHolidays(!!ip?.holidays && ip.holidays.length > 0);
   }, [ip]);
 
   /**
@@ -61,13 +57,11 @@ export default function App() {
       setIp(info);
 
       if (info.ipApi.status === "fail") {
-        if (info.ipApi.message?.includes("reserved range")) {
-          setError(
-            `IP reservada: ${ipAddr} - No disponible per a geolocalització`
-          );
-        } else {
-          setError(`No hi ha dades per: ${ipAddr}`);
-        }
+        setError(
+          info.ipApi.message?.includes("reserved range")
+            ? `IP reservada: ${ipAddr} - No disponible per a geolocalització`
+            : `No hi ha dades per: ${ipAddr}`
+        );
       }
     } catch (err: any) {
       setError(
@@ -84,10 +78,10 @@ export default function App() {
 
   return (
     <div className="d-flex flex-column vh-100 bg-dark">
-      <div className="bg-black py-3">
+      <header className="bg-black py-3">
         <h1 className="text-white text-center mb-3">IPFesta</h1>
 
-        <div className="container mb-2">
+        <div className="container">
           <div className="row justify-content-center">
             <div className="col-md-6">
               <div className="row g-2">
@@ -111,23 +105,23 @@ export default function App() {
             </div>
           </div>
         </div>
-      </div>
+      </header>
 
-      <div className="flex-grow-1 position-relative">
+      <main className="flex-grow-1 position-relative">
         <Map ipInfo={ip} styleIdx={styleIdx} />
-      </div>
 
-      {ip && showHolidays && (
-        <HolidayInfo
-          holidays={ip.holidays}
-          country={ip.ipApi.country}
-          isVisible={showHolidays}
-        />
-      )}
+        {ip && showHolidays && (
+          <HolidayInfo
+            holidays={ip.holidays}
+            country={ip.ipApi.country}
+            isVisible={showHolidays}
+          />
+        )}
+      </main>
 
       {showErr && error && (
         <div className="position-fixed top-0 start-50 translate-middle-x mt-4 z-3">
-          <div className="alert alert-danger d-flex align-items-center">
+          <div className="alert alert-danger d-flex align-items-center py-2 px-3">
             <i className="bi bi-exclamation-triangle-fill me-2" />
             <span>{error}</span>
           </div>
