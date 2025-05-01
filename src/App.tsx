@@ -83,29 +83,37 @@ export default function App() {
   };
 
   return (
-    <div className="app-container">
-      <div className="main-header">
-        <h1 className="app-title">IPFesta - Cercador d'IPs</h1>
+    <div className="d-flex flex-column vh-100 bg-dark">
+      <div className="bg-black py-3">
+        <h1 className="text-white text-center mb-3">IPFesta</h1>
 
-        <div className="search-controls">
-          <IpSearch onSearch={handleSearch} isLoading={loading} />
-
-          <div className="map-style-selector">
-            <select
-              value={styleIdx}
-              onChange={(e) => setStyleIdx(parseInt(e.target.value))}
-            >
-              {mapStyles.map((s, i) => (
-                <option key={i} value={i}>
-                  {s.name}
-                </option>
-              ))}
-            </select>
+        <div className="container mb-2">
+          <div className="row justify-content-center">
+            <div className="col-md-6">
+              <div className="row g-2">
+                <div className="col-9">
+                  <IpSearch onSearch={handleSearch} isLoading={loading} />
+                </div>
+                <div className="col-3">
+                  <select
+                    className="form-select bg-dark text-white border-secondary"
+                    value={styleIdx}
+                    onChange={(e) => setStyleIdx(parseInt(e.target.value))}
+                  >
+                    {mapStyles.map((s, i) => (
+                      <option key={i} value={i}>
+                        {s.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      <div className="map-section">
+      <div className="flex-grow-1 position-relative">
         <Map ipInfo={ip} styleIdx={styleIdx} />
       </div>
 
@@ -118,9 +126,9 @@ export default function App() {
       )}
 
       {showErr && error && (
-        <div className="error-notification">
-          <div className="error-content">
-            <i className="bi bi-exclamation-triangle-fill error-icon" />
+        <div className="position-fixed top-0 start-50 translate-middle-x mt-4 z-3">
+          <div className="alert alert-danger d-flex align-items-center">
+            <i className="bi bi-exclamation-triangle-fill me-2" />
             <span>{error}</span>
           </div>
         </div>

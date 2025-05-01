@@ -56,7 +56,7 @@ export default function Map({
     <MapContainer
       center={hasValidCoordinates ? pos : defaultPos}
       zoom={hasValidCoordinates ? 13 : 3}
-      className="mapa-contenidor"
+      style={{ width: "100%", height: "100%" }}
       zoomControl={true}
     >
       <TileLayer url={mapUrls[styleIdx]} attribution="" />
@@ -64,18 +64,16 @@ export default function Map({
       {hasValidCoordinates && (
         <Marker position={pos} icon={mapIcon}>
           <Popup>
-            <div className="info-popup">
-              <span className="info-ip">IP: {ipInfo.ipApi.query}</span>
-              <p className="info-ciutat">
+            <div>
+              <div className="fw-bold mb-2">IP: {ipInfo.ipApi.query}</div>
+              <p className="mb-1">
                 📍 {ipInfo.ipApi.city}, {ipInfo.ipApi.country}
               </p>
-              <p className="info-isp">🌐 {ipInfo.ipApi.isp}</p>
+              <p className="mb-1">🌐 {ipInfo.ipApi.isp}</p>
               {ipInfo.ipApi.org && (
-                <p className="info-org">🏢 {ipInfo.ipApi.org}</p>
+                <p className="mb-1">🏢 {ipInfo.ipApi.org}</p>
               )}
-              {ipInfo.ipApi.as && (
-                <p className="info-as">🔌 {ipInfo.ipApi.as}</p>
-              )}
+              {ipInfo.ipApi.as && <p className="mb-0">🔌 {ipInfo.ipApi.as}</p>}
             </div>
           </Popup>
         </Marker>

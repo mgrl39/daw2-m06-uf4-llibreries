@@ -33,11 +33,11 @@ const IpSearch = ({ onSearch, isLoading }: Props) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="ip-search-form">
-      <div className="search-input-group">
+    <form onSubmit={handleSubmit}>
+      <div className="input-group">
         <input
           type="text"
-          className="ip-input"
+          className="form-control bg-dark text-white border-secondary"
           value={ip}
           onChange={handleInput}
           onPaste={(e) => {
@@ -51,9 +51,9 @@ const IpSearch = ({ onSearch, isLoading }: Props) => {
           disabled={isLoading}
           maxLength={15}
         />
-        <button className="search-button" type="submit" disabled={isLoading}>
+        <button className="btn btn-primary" type="submit" disabled={isLoading}>
           {isLoading ? (
-            <span className="loading-spinner" />
+            <span className="spinner-border spinner-border-sm" />
           ) : (
             <i className="bi bi-search" />
           )}
