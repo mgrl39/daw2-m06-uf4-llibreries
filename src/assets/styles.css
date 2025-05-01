@@ -36,89 +36,79 @@ body {
 
 /* Contenidor principal */
 .app-container {
-  position: relative;
+  display: flex;
+  flex-direction: column;
   width: 100%;
   height: 100vh;
   overflow: hidden;
 }
 
+/* Capçalera amb títol i controls */
+.main-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding: 20px 0;
+  background-color: var(--color-white);
+  box-shadow: var(--shadow-sm);
+  z-index: 10;
+}
+
+.app-title {
+  font-size: 1.8rem;
+  margin: 0 0 20px 0;
+  color: var(--color-primary);
+  text-align: center;
+}
+
+/* Controls de cerca i estil */
+.search-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 500px;
+  gap: 15px;
+}
+
 /* Component del mapa */
+.map-section {
+  flex: 1;
+  width: 100%;
+  position: relative;
+}
+
 .mapa-contenidor {
-  height: 100vh;
-  width: 100vw;
-  z-index: 1;
+  width: 100%;
+  height: 100%;
 }
 
 /* Selector d'estil del mapa */
-.mapa-selector-estil {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  z-index: 1000;
+.map-style-selector {
+  width: 100%;
+  max-width: 300px;
 }
 
-.mapa-selector-estil select {
+.map-style-selector select {
+  width: 100%;
   background-color: var(--color-white);
-  border: none;
-  padding: 8px 12px;
+  border: 1px solid #ddd;
+  padding: 10px;
   border-radius: var(--radius-md);
-  box-shadow: var(--shadow-sm);
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   cursor: pointer;
   outline: none;
 }
 
-/* Ajuda de dreceres de teclat */
-.ajuda-teclat {
-  position: absolute;
-  bottom: 20px;
-  left: 20px;
-  z-index: 1000;
-  background-color: rgba(255, 255, 255, 0.9);
-  padding: 15px;
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-sm);
-  max-width: 200px;
+.map-style-selector select:focus {
+  border-color: var(--color-primary);
 }
 
-.ajuda-teclat-contingut h5 {
-  margin-top: 0;
-  margin-bottom: 10px;
-  font-size: 0.95rem;
-  font-weight: 600;
-}
-
-.ajuda-teclat-contingut div {
-  font-size: 0.85rem;
-  margin-bottom: 5px;
-}
-
-.ajuda-teclat-contingut span {
-  font-family: var(--font-family-mono);
-  font-weight: 600;
-}
-
-/* Panell de cerca */
-.search-panel {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  z-index: 1000;
-  background-color: rgba(255, 255, 255, 0.92);
-  padding: 20px;
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-md);
-  width: 280px;
-}
-
-.search-title {
-  margin: 0 0 15px 0;
-  font-size: 1.2rem;
-  color: var(--color-dark);
-}
-
+/* Formulari de cerca IP */
 .ip-search-form {
   width: 100%;
+  max-width: 300px;
 }
 
 .search-input-group {
@@ -286,20 +276,22 @@ body {
 
 /* Adaptació per a dispositius mòbils */
 @media (max-width: 768px) {
-  .search-panel {
-    width: calc(100% - 40px);
-    left: 20px;
-    right: 20px;
-    max-width: none;
+  .main-header {
+    padding: 15px 20px;
+  }
+
+  .app-title {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+  }
+
+  .search-controls {
+    padding: 0 10px;
   }
 
   .festius-contenidor {
     width: calc(100% - 40px);
     left: 20px;
     right: 20px;
-  }
-
-  .mapa-selector-estil {
-    top: 90px;
   }
 }

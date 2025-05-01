@@ -6,6 +6,17 @@ import { CombinedIpInfo } from "./types/IpInfo";
 import HolidayInfo from "./components/HolidayInfo";
 
 /**
+ * Estils de mapa disponibles
+ */
+const mapStyles = [
+  { name: "☀️ Dia" },
+  { name: "🌃 Nit" },
+  { name: "🛰️ Satèl·lit" },
+  { name: "🛣️ Carrers" },
+  { name: "🏥 Humanitari" },
+];
+
+/**
  * Component principal de l'aplicació
  */
 export default function App() {
@@ -14,6 +25,7 @@ export default function App() {
   const [error, setError] = useState<string>();
   const [showErr, setShowErr] = useState(false);
   const [showHolidays, setShowHolidays] = useState(false);
+  const [styleIdx, setStyleIdx] = useState(0);
 
   /**
    * Mostra i oculta errors automàticament
@@ -72,11 +84,29 @@ export default function App() {
 
   return (
     <div className="app-container">
-      <Map ipInfo={ip} />
+      <div className="main-header">
+        <h1 className="app-title">IPFesta - Cercador d'IPs</h1>
 
-      <div className="search-panel">
-        <h3 className="search-title">Cerca per IP</h3>
-        <IpSearch onSearch={handleSearch} isLoading={loading} />
+        <div className="search-controls">
+          <IpSearch onSearch={handleSearch} isLoading={loading} />
+
+          <div className="map-style-selector">
+            <select
+              value={styleIdx}
+              onChange={(e) => setStyleIdx(parseInt(e.target.value))}
+            >
+              {mapStyles.map((s, i) => (
+                <option key={i} value={i}>
+                  {s.name}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div className="map-section">
+        <Map ipInfo={ip} styleIdx={styleIdx} />
       </div>
 
       {ip && showHolidays && (

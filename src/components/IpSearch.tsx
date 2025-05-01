@@ -44,7 +44,7 @@ const IpSearch = ({ onSearch, isLoading }: Props) => {
             const text = e.clipboardData.getData("text");
             if (!isValidFormat(text)) e.preventDefault();
           }}
-          placeholder="Ex: 8.8.8.8"
+          placeholder="Introdueix una IP (Ex: 8.8.8.8)"
           pattern="^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"
           title="IP vàlida (format: xxx.xxx.xxx.xxx)"
           required
